@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>INTERN | Smart Internship Discovery</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+<div class="home-page">
+
+    <!-- ================= NAVBAR ================= -->
+
+    <nav class="navbar">
+
+        <a href="{{ url_for('home') }}" class="brand">
+
+            <div class="brand-symbol">
+                <span class="briefcase-handle"></span>
+                <span class="brand-arrow">↗</span>
+            </div>
+
+            <div class="brand-name">
+                INTERN
+                <span>Smart Internship Discovery</span>
+            </div>
+
+        </a>
+
+        <div class="nav-links">
+            <a href="#features">Features</a>
+            <a href="#how-it-works">How It Works</a>
+            <a href="#about">About</a>
+        </div>
+
+        <div class="nav-actions">
+
+            <a href="{{ url_for('login') }}"
+               class="nav-login">
+                Log in
+            </a>
+
+            <a href="{{ url_for('register') }}"
+               class="nav-primary">
+                Get Started
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- ================= HERO ================= -->
+
+    <main class="hero">
+
+        <section class="hero-content">
+
+            <div class="hero-badge">
+                <span></span>
+                SMART INTERNSHIP DISCOVERY
+            </div>
+
+            <h1>
+                Find internships that
+                <span>fit your potential.</span>
+            </h1>
+
+            <p class="hero-description">
+                INTERN connects your skills, education and interests
+                with relevant internship opportunities — helping you
+                understand your match and discover the skills you need
+                to grow.
+            </p>
+
+            <div class="hero-buttons">
+
+                <a href="{{ url_for('register') }}"
+                   class="primary-button">
+                    Find My Internships
+                    <span>→</span>
+                </a>
+
+                <a href="#how-it-works"
+                   class="secondary-button">
+                    See How It Works
+                </a>
+
+            </div>
+
+            <div class="trust-row">
+
+                <div>
+                    <span class="check">✓</span>
+                    Personalized matching
+                </div>
+
+                <div>
+                    <span class="check">✓</span>
+                    Skill-gap analysis
+                </div>
+
+                <div>
+                    <span class="check">✓</span>
+                    Clear recommendations
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ========== RIGHT HERO VISUAL ========== -->
+
+        <section class="hero-visual">
+
+            <div class="visual-glow glow-one"></div>
+            <div class="visual-glow glow-two"></div>
+
+            <div class="system-card">
+
+                <div class="system-card-header">
+
+                    <div>
+                        <span class="small-label">
+                            YOUR JOURNEY WITH INTERN
+                        </span>
+
+                        <h2>
+                            From profile to opportunity.
+                        </h2>
+                    </div>
+
+                    <div class="live-badge">
+                        <span></span>
+                        SMART MATCHING
+                    </div>
+
+                </div>
+
+
+                <div class="journey">
+
+                    <!-- STEP 1 -->
+
+                    <div class="journey-step">
+
+                        <div class="step-icon profile-icon">
+                            <span>01</span>
+                        </div>
+
+                        <div class="step-content">
+                            <small>BUILD YOUR PROFILE</small>
+                            <strong>Add your education & interests</strong>
+                            <p>
+                                Tell INTERN about your academic background
+                                and career goals.
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="journey-line"></div>
+
+
+                    <!-- STEP 2 -->
+
+                    <div class="journey-step">
+
+                        <div class="step-icon resume-icon">
+                            <span>02</span>
+                        </div>
+
+                        <div class="step-content">
+                            <small>SKILLS & RESUME</small>
+                            <strong>Show what you can do</strong>
+                            <p>
+                                Add your skills and resume to build your
+                                internship profile.
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="journey-line"></div>
+
+
+                    <!-- STEP 3 -->
+
+                    <div class="journey-step active-step">
+
+                        <div class="step-icon match-icon">
+                            <span>03</span>
+                        </div>
+
+                        <div class="step-content">
+                            <small>SMART MATCHING</small>
+                            <strong>Discover suitable internships</strong>
+
+                            <div class="mini-tags">
+                                <span>Match Score</span>
+                                <span>Skill Gap</span>
+                                <span>Recommendations</span>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="system-footer">
+
+                    <div class="footer-icon">✦</div>
+
+                    <p>
+                        <strong>More than a search.</strong>
+                        Understand why an internship matches your profile
+                        and what you can improve.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- ================= FEATURES ================= -->
+
+    <section class="features-section" id="features">
+
+        <div class="section-heading">
+            <span>BUILT FOR STUDENTS</span>
+
+            <h2>
+                Make internship searching smarter.
+            </h2>
+
+            <p>
+                INTERN brings your profile, skills and internship
+                requirements together in one place.
+            </p>
+        </div>
+
+
+        <div class="feature-grid">
+
+            <article class="feature-card">
+
+                <div class="feature-number">01</div>
+
+                <div class="feature-icon">◎</div>
+
+                <h3>Personalized Matching</h3>
+
+                <p>
+                    Compare your skills, education and interests with
+                    internship requirements to discover relevant opportunities.
+                </p>
+
+            </article>
+
+
+            <article class="feature-card featured">
+
+                <div class="feature-number">02</div>
+
+                <div class="feature-icon">↗</div>
+
+                <h3>Match Score</h3>
+
+                <p>
+                    See how closely your profile matches internship
+                    requirements through a clear compatibility score.
+                </p>
+
+            </article>
+
+
+            <article class="feature-card">
+
+                <div class="feature-number">03</div>
+
+                <div class="feature-icon">◇</div>
+
+                <h3>Skill-Gap Analysis</h3>
+
+                <p>
+                    Identify missing skills and understand the areas
+                    you can improve for your preferred internships.
+                </p>
+
+            </article>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= HOW IT WORKS ================= -->
+
+    <section class="how-section" id="how-it-works">
+
+        <div class="how-left">
+
+            <span class="section-label">
+                HOW INTERN WORKS
+            </span>
+
+            <h2>
+                Your internship search,
+                <span>made clearer.</span>
+            </h2>
+
+            <p>
+                Build your student profile once. INTERN uses your
+                information to help you explore suitable opportunities
+                and understand your compatibility.
+            </p>
+
+            <a href="{{ url_for('register') }}"
+               class="primary-button">
+                Create Your Profile
+                <span>→</span>
+            </a>
+
+        </div>
+
+
+        <div class="process-list">
+
+            <div class="process-item">
+                <span>01</span>
+                <div>
+                    <strong>Create your profile</strong>
+                    <p>Add your education, interests and career goals.</p>
+                </div>
+            </div>
+
+            <div class="process-item">
+                <span>02</span>
+                <div>
+                    <strong>Add skills & resume</strong>
+                    <p>Provide the information used for internship matching.</p>
+                </div>
+            </div>
+
+            <div class="process-item">
+                <span>03</span>
+                <div>
+                    <strong>Explore your matches</strong>
+                    <p>View suitable internships and their match scores.</p>
+                </div>
+            </div>
+
+            <div class="process-item">
+                <span>04</span>
+                <div>
+                    <strong>Understand your skill gaps</strong>
+                    <p>See which skills you have and which ones you can improve.</p>
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= ABOUT / CTA ================= -->
+
+    <section class="home-cta" id="about">
+
+        <div>
+
+            <span>READY TO DISCOVER?</span>
+
+            <h2>
+                Your next opportunity could be
+                closer than you think.
+            </h2>
+
+            <p>
+                Create your INTERN profile and start discovering
+                internships aligned with your potential.
+            </p>
+
+        </div>
+
+        <a href="{{ url_for('register') }}"
+           class="cta-button">
+            Get Started
+            <span>→</span>
+        </a>
+
+    </section>
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer class="home-footer">
+
+        <div class="footer-brand">
+            <div class="mini-brand-symbol">↗</div>
+            <strong>INTERN</strong>
+        </div>
+
+        <p>
+            Student Internship Recommendation System
+        </p>
+
+        <p>
+            © 2026 INTERN
+        </p>
+
+    </footer>
+
+</div>
+
+</body>
+</html>

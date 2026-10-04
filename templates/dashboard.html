@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Dashboard | INTERN</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/dashboard.css') }}">
+</head>
+
+<body class="dashboard-body">
+
+<div class="dashboard-layout">
+
+    <aside class="dashboard-sidebar">
+
+        <a href="{{ url_for('dashboard') }}" class="dashboard-brand">
+            <span class="dashboard-brand-mark"></span>
+
+            <span class="dashboard-brand-text">
+                <strong>INTERN</strong>
+                <span>SMART INTERNSHIP DISCOVERY</span>
+            </span>
+        </a>
+
+        <div class="sidebar-label">STUDENT PORTAL</div>
+
+        <nav class="sidebar-nav">
+
+            <a href="{{ url_for('dashboard') }}" class="sidebar-link active">
+                <span class="sidebar-icon">⌂</span>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="{{ url_for('profile') }}" class="sidebar-link">
+                <span class="sidebar-icon">◯</span>
+                <span>My Profile</span>
+            </a>
+
+            <a href="{{ url_for('skills') }}" class="sidebar-link">
+                <span class="sidebar-icon">◇</span>
+                <span>My Skills</span>
+            </a>
+
+            <a href="{{ url_for('resume') }}" class="sidebar-link">
+                <span class="sidebar-icon">▤</span>
+                <span>Resume</span>
+            </a>
+
+            <a href="{{ url_for('internships') }}" class="sidebar-link">
+                <span class="sidebar-icon">⌕</span>
+                <span>Find Internships</span>
+            </a>
+
+            <a href="{{ url_for('recommendations') }}" class="sidebar-link">
+                <span class="sidebar-icon">✦</span>
+                <span>Recommendations</span>
+            </a>
+
+            <a href="{{ url_for('skill_gap') }}" class="sidebar-link">
+                <span class="sidebar-icon">↗</span>
+                <span>Skill Gap</span>
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <div class="sidebar-user">
+
+                <div class="sidebar-avatar">
+                    {{ student["full_name"][0]|upper }}
+                </div>
+
+                <div class="sidebar-user-info">
+                    <strong>{{ student["full_name"] }}</strong>
+                    <span>{{ student["student_id"] }}</span>
+                </div>
+
+            </div>
+
+            <a href="{{ url_for('logout') }}"
+               class="sidebar-link logout-link">
+                <span class="sidebar-icon">↪</span>
+                <span>Log out</span>
+            </a>
+
+        </div>
+
+    </aside>
+
+    <main class="dashboard-main">
+
+        <header class="dashboard-topbar">
+
+            <div class="topbar-left">
+                <span>STUDENT DASHBOARD</span>
+                <strong>Overview</strong>
+            </div>
+
+            <div class="topbar-account">
+
+                <div class="topbar-avatar">
+                    {{ student["full_name"][0]|upper }}
+                </div>
+
+                <div class="topbar-account-text">
+                    <strong>{{ student["full_name"] }}</strong>
+                    <span>Student</span>
+                </div>
+
+            </div>
+
+        </header>
+
+        <div class="dashboard-content">
+
+            <section class="dashboard-welcome">
+
+                <div>
+
+                    <span class="welcome-kicker">
+                        WELCOME TO INTERN
+                    </span>
+
+                    <h1>
+                        Welcome, {{ student["full_name"] }}!
+                    </h1>
+
+                    {% if resume %}
+
+                        <p>
+                            Your academic profile, skills and resume are ready.
+                            Your student setup is complete and INTERN can now use
+                            your information for internship discovery.
+                        </p>
+
+                    {% elif skills %}
+
+                        <p>
+                            Your academic profile and skills are ready. Upload
+                            your resume next so INTERN can analyse your
+                            education, experience and additional skills.
+                        </p>
+
+                    {% elif profile %}
+
+                        <p>
+                            Your academic profile is ready. Continue by adding
+                            your skills so INTERN can begin preparing your
+                            internship matches.
+                        </p>
+
+                    {% else %}
+
+                        <p>
+                            Complete your internship profile to help INTERN
+                            understand your education, skills, interests and
+                            career goals before generating recommendations.
+                        </p>
+
+                    {% endif %}
+
+                </div>
+
+                <div class="account-id">
+                    Student ID:
+                    <strong>{{ student["student_id"] }}</strong>
+                </div>
+
+            </section>
+
+            <div class="dashboard-grid">
+
+                <section class="dashboard-card get-started-card">
+
+                    <div class="card-heading">
+
+                        <div>
+
+                            <span class="card-heading-label">
+                                GET STARTED
+                            </span>
+
+                            <h2>
+                                Prepare your internship profile
+                            </h2>
+
+                        </div>
+
+                        {% if resume %}
+
+                            <span class="setup-badge">
+                                COMPLETE
+                            </span>
+
+                        {% elif skills %}
+
+                            <span class="setup-badge">
+                                ALMOST READY
+                            </span>
+
+                        {% elif profile %}
+
+                            <span class="setup-badge">
+                                IN PROGRESS
+                            </span>
+
+                        {% else %}
+
+                            <span class="setup-badge">
+                                SETUP REQUIRED
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+                    <div class="setup-list">
+
+                        <div class="setup-item">
+
+                            <div class="setup-number">
+
+                                {% if profile %}
+                                    ✓
+                                {% else %}
+                                    01
+                                {% endif %}
+
+                            </div>
+
+                            <div class="setup-info">
+
+                                {% if profile %}
+
+                                    <strong>
+                                        Profile completed
+                                    </strong>
+
+                                    <p>
+                                        Your academic information, interests
+                                        and career goal have been saved.
+                                    </p>
+
+                                {% else %}
+
+                                    <strong>
+                                        Complete your profile
+                                    </strong>
+
+                                    <p>
+                                        Add your course, branch, year,
+                                        interests and career goals.
+                                    </p>
+
+                                {% endif %}
+
+                            </div>
+
+                            <a href="{{ url_for('profile') }}"
+                               class="setup-action">
+
+                                {% if profile %}
+                                    Edit Profile
+                                {% else %}
+                                    Add Profile
+                                {% endif %}
+
+                            </a>
+
+                        </div>
+
+                        <div class="setup-item">
+
+                            <div class="setup-number">
+
+                                {% if skills %}
+                                    ✓
+                                {% else %}
+                                    02
+                                {% endif %}
+
+                            </div>
+
+                            <div class="setup-info">
+
+                                {% if skills %}
+
+                                    <strong>
+                                        Skills added
+                                    </strong>
+
+                                    <p>
+                                        {{ skills|length }} skill{% if skills|length != 1 %}s{% endif %}
+                                        saved to your internship profile.
+                                    </p>
+
+                                {% else %}
+
+                                    <strong>
+                                        Add your skills
+                                    </strong>
+
+                                    <p>
+                                        Tell INTERN about your technical
+                                        and professional skills.
+                                    </p>
+
+                                {% endif %}
+
+                            </div>
+
+                            <a href="{{ url_for('skills') }}"
+                               class="setup-action">
+
+                                {% if skills %}
+                                    Edit Skills
+                                {% else %}
+                                    Add Skills
+                                {% endif %}
+
+                            </a>
+
+                        </div>
+
+                        <div class="setup-item">
+
+                            <div class="setup-number">
+
+                                {% if resume %}
+                                    ✓
+                                {% else %}
+                                    03
+                                {% endif %}
+
+                            </div>
+
+                            <div class="setup-info">
+
+                                {% if resume %}
+
+                                    <strong>
+                                        Resume uploaded
+                                    </strong>
+
+                                    <p>
+                                        Your resume has been verified and
+                                        analysed successfully.
+                                    </p>
+
+                                {% else %}
+
+                                    <strong>
+                                        Upload your resume
+                                    </strong>
+
+                                    <p>
+                                        Upload your resume so INTERN can analyse
+                                        your skills, education and experience.
+                                    </p>
+
+                                {% endif %}
+
+                            </div>
+
+                            <a href="{{ url_for('resume') }}"
+                               class="setup-action">
+
+                                {% if resume %}
+                                    View Resume
+                                {% else %}
+                                    Upload Resume
+                                {% endif %}
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+                <div>
+
+                    <section class="dashboard-card profile-card">
+
+                        <h3>
+                            Profile progress
+                        </h3>
+
+                        <p>
+                            Complete the setup steps to unlock personalized
+                            internship recommendations.
+                        </p>
+
+                        <div class="progress-header">
+
+                            {% if resume %}
+
+                                <span>
+                                    Student setup completed
+                                </span>
+
+                            {% elif skills %}
+
+                                <span>
+                                    Profile and skills completed
+                                </span>
+
+                            {% elif profile %}
+
+                                <span>
+                                    Academic profile completed
+                                </span>
+
+                            {% else %}
+
+                                <span>
+                                    Account created
+                                </span>
+
+                            {% endif %}
+
+                            <strong>
+                                {{ profile_completion }}%
+                            </strong>
+
+                        </div>
+
+                        <div class="progress-track"
+                             data-progress="{{ profile_completion }}">
+
+                            {% if profile_completion >= 100 %}
+
+                                <div class="progress-fill progress-100"></div>
+
+                            {% elif profile_completion >= 80 %}
+
+                                <div class="progress-fill progress-80"></div>
+
+                            {% elif profile_completion >= 60 %}
+
+                                <div class="progress-fill progress-60"></div>
+
+                            {% elif profile_completion >= 40 %}
+
+                                <div class="progress-fill progress-40"></div>
+
+                            {% elif profile_completion >= 20 %}
+
+                                <div class="progress-fill progress-20"></div>
+
+                            {% else %}
+
+                                <div class="progress-fill progress-0"></div>
+
+                            {% endif %}
+
+                        </div>
+
+                        <div class="profile-details">
+
+                            <div class="profile-detail">
+
+                                <span>
+                                    Name
+                                </span>
+
+                                <strong>
+                                    {{ student["full_name"] }}
+                                </strong>
+
+                            </div>
+
+                            <div class="profile-detail">
+
+                                <span>
+                                    Student ID
+                                </span>
+
+                                <strong>
+                                    {{ student["student_id"] }}
+                                </strong>
+
+                            </div>
+
+                            {% if profile %}
+
+                                <div class="profile-detail">
+
+                                    <span>
+                                        Course
+                                    </span>
+
+                                    <strong>
+                                        {{ profile["course"] }}
+                                    </strong>
+
+                                </div>
+
+                                <div class="profile-detail">
+
+                                    <span>
+                                        Branch
+                                    </span>
+
+                                    <strong>
+                                        {{ profile["branch"] }}
+                                    </strong>
+
+                                </div>
+
+                            {% else %}
+
+                                <div class="profile-detail">
+
+                                    <span>
+                                        Email
+                                    </span>
+
+                                    <strong>
+                                        {{ student["email"] }}
+                                    </strong>
+
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+                    </section>
+
+                    <section class="dashboard-card quick-card">
+
+                        {% if resume %}
+
+                            <h3>
+                                Your student profile is ready.
+                            </h3>
+
+                            <p>
+                                Your academic information, skills and resume
+                                analysis are now available for INTERN's
+                                internship matching modules.
+                            </p>
+
+                            <a href="{{ url_for('recommendations') }}"
+                               class="quick-button">
+                                View Recommendations →
+                            </a>
+
+                        {% elif skills %}
+
+                            <h3>
+                                Your skills are saved.
+                            </h3>
+
+                            <p>
+                                Your student profile now includes your academic
+                                information and skills. Resume analysis is the
+                                next setup step.
+                            </p>
+
+                            <a href="{{ url_for('resume') }}"
+                               class="quick-button">
+                                Upload My Resume →
+                            </a>
+
+                        {% elif profile %}
+
+                            <h3>
+                                Your academic profile is ready.
+                            </h3>
+
+                            <p>
+                                Next, add your skills so INTERN can compare
+                                your abilities with internship requirements.
+                            </p>
+
+                            <a href="{{ url_for('skills') }}"
+                               class="quick-button">
+                                Add My Skills →
+                            </a>
+
+                        {% else %}
+
+                            <h3>
+                                Ready to build your profile?
+                            </h3>
+
+                            <p>
+                                Your profile is the foundation for
+                                eligibility filtering and personalized
+                                internship matching.
+                            </p>
+
+                            <a href="{{ url_for('profile') }}"
+                               class="quick-button">
+                                Complete My Profile →
+                            </a>
+
+                        {% endif %}
+
+                    </section>
+
+                </div>
+
+            </div>
+
+            <section class="dashboard-section">
+
+                <div class="section-title-row">
+
+                    <div>
+
+                        <h2>
+                            Your INTERN tools
+                        </h2>
+
+                        <p>
+                            Explore internship discovery and personalized
+                            matching tools.
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="module-grid">
+
+                    <article class="module-card">
+
+                        <span class="module-status">
+                            AVAILABLE
+                        </span>
+
+                        <div class="module-icon">
+                            ⌕
+                        </div>
+
+                        <h3>
+                            Internship Search
+                        </h3>
+
+                        <p>
+                            Search and explore available internship
+                            opportunities.
+                        </p>
+
+                        <a href="{{ url_for('internships') }}"
+                           class="quick-button">
+                            Find Internships →
+                        </a>
+
+                    </article>
+
+                    <article class="module-card">
+
+                        <span class="module-status">
+                            AVAILABLE
+                        </span>
+
+                        <div class="module-icon">
+                            ✦
+                        </div>
+
+                        <h3>
+                            Recommendations
+                        </h3>
+
+                        <p>
+                            Receive internships matched to your
+                            qualifications, skills and interests.
+                        </p>
+
+                        <a href="{{ url_for('recommendations') }}"
+                           class="quick-button">
+                            View Recommendations →
+                        </a>
+
+                    </article>
+
+                    <article class="module-card">
+
+                        <span class="module-status">
+                            AVAILABLE
+                        </span>
+
+                        <div class="module-icon">
+                            ↗
+                        </div>
+
+                        <h3>
+                            Skill Gap Analysis
+                        </h3>
+
+                        <p>
+                            Identify skills you may need for
+                            suitable internship opportunities.
+                        </p>
+
+                        <a href="{{ url_for('skill_gap') }}"
+                           class="quick-button">
+                            Analyze Skill Gaps →
+                        </a>
+
+                    </article>
+
+                </div>
+
+            </section>
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Skills | INTERN</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/skills.css') }}">
+</head>
+
+<body class="skills-body">
+
+<div class="skills-layout">
+
+    <aside class="skills-sidebar">
+
+        <a href="{{ url_for('dashboard') }}" class="skills-brand">
+            <span class="skills-brand-mark"></span>
+
+            <span class="skills-brand-text">
+                <strong>INTERN</strong>
+                <span>SMART INTERNSHIP DISCOVERY</span>
+            </span>
+        </a>
+
+        <div class="sidebar-label">STUDENT PORTAL</div>
+
+        <nav class="sidebar-nav">
+
+            <a href="{{ url_for('dashboard') }}" class="sidebar-link">
+                <span class="sidebar-icon">⌂</span>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="{{ url_for('profile') }}" class="sidebar-link">
+                <span class="sidebar-icon">◯</span>
+                <span>My Profile</span>
+            </a>
+
+            <a href="{{ url_for('skills') }}" class="sidebar-link active">
+                <span class="sidebar-icon">◇</span>
+                <span>My Skills</span>
+            </a>
+
+            <a href="{{ url_for('resume') }}" class="sidebar-link">
+                <span class="sidebar-icon">▤</span>
+                <span>Resume</span>
+            </a>
+
+            <a href="{{ url_for('internships') }}" class="sidebar-link">
+                <span class="sidebar-icon">⌕</span>
+                <span>Find Internships</span>
+            </a>
+
+            <a href="{{ url_for('recommendations') }}" class="sidebar-link">
+                <span class="sidebar-icon">✦</span>
+                <span>Recommendations</span>
+            </a>
+
+            <a href="{{ url_for('skill_gap') }}" class="sidebar-link">
+                <span class="sidebar-icon">↗</span>
+                <span>Skill Gap</span>
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <div class="sidebar-user">
+
+                <div class="sidebar-avatar">
+                    {{ student["full_name"][0]|upper }}
+                </div>
+
+                <div class="sidebar-user-info">
+                    <strong>{{ student["full_name"] }}</strong>
+                    <span>{{ student["student_id"] }}</span>
+                </div>
+
+            </div>
+
+            <a href="{{ url_for('logout') }}"
+               class="sidebar-link logout-link">
+                <span class="sidebar-icon">↪</span>
+                <span>Log out</span>
+            </a>
+
+        </div>
+
+    </aside>
+
+    <main class="skills-main">
+
+        <header class="skills-topbar">
+
+            <div>
+                <span>STUDENT PROFILE</span>
+                <strong>My Skills</strong>
+            </div>
+
+            <a href="{{ url_for('dashboard') }}" class="dashboard-link">
+                Back to Dashboard
+            </a>
+
+        </header>
+
+        <div class="skills-content">
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-container">
+                        {% for category, message in messages %}
+                            <div class="flash-message {{ category }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            <section class="skills-hero">
+
+                <div>
+
+                    <span class="skills-kicker">
+                        BUILD YOUR SKILL PROFILE
+                    </span>
+
+                    <h1>What can you do?</h1>
+
+                    <p>
+                        Select the skills you already have. INTERN will later
+                        compare these skills with internship requirements to
+                        calculate match scores and identify skill gaps.
+                    </p>
+
+                </div>
+
+                <div class="skills-count-card">
+                    <strong id="selected-count">
+                        {{ saved_skills|length }}
+                    </strong>
+                    <span>Skills selected</span>
+                </div>
+
+            </section>
+
+            <form method="POST"
+                  action="{{ url_for('skills') }}"
+                  id="skills-form">
+
+                <input type="hidden"
+                       id="skills-input"
+                       name="skills"
+                       value="{{ saved_skills|join(',') }}">
+
+                <section class="skills-card selected-card">
+
+                    <div class="section-heading">
+
+                        <div>
+                            <span>YOUR SKILLS</span>
+                            <h2>Selected skills</h2>
+                        </div>
+
+                        <p>
+                            Click a selected skill to remove it.
+                        </p>
+
+                    </div>
+
+                    <div id="selected-skills"
+                         class="selected-skills">
+
+                        <div class="empty-selection"
+                             id="empty-selection">
+                            No skills selected yet. Choose skills below.
+                        </div>
+
+                    </div>
+
+                </section>
+
+                <section class="skills-card">
+
+                    <div class="section-heading">
+
+                        <div>
+                            <span>ADD A SKILL</span>
+                            <h2>Search or add your own</h2>
+                        </div>
+
+                    </div>
+
+                    <div class="custom-skill-row">
+
+                        <input type="text"
+                               id="custom-skill"
+                               maxlength="40"
+                               placeholder="e.g. Flask, React, Power BI">
+
+                        <button type="button"
+                                id="add-custom-skill">
+                            Add Skill
+                        </button>
+
+                    </div>
+
+                    <small class="custom-message"
+                           id="custom-message">
+                    </small>
+
+                </section>
+
+                <section class="skills-card">
+
+                    <div class="section-heading">
+
+                        <div>
+                            <span>POPULAR SKILLS</span>
+                            <h2>Choose from common skills</h2>
+                        </div>
+
+                        <p>
+                            Select all that apply to you.
+                        </p>
+
+                    </div>
+
+                    <div class="skill-category">
+
+                        <h3>Programming Languages</h3>
+
+                        <div class="skill-options">
+                            <button type="button" class="skill-chip" data-skill="Python">Python</button>
+                            <button type="button" class="skill-chip" data-skill="Java">Java</button>
+                            <button type="button" class="skill-chip" data-skill="C">C</button>
+                            <button type="button" class="skill-chip" data-skill="C++">C++</button>
+                            <button type="button" class="skill-chip" data-skill="C#">C#</button>
+                            <button type="button" class="skill-chip" data-skill="JavaScript">JavaScript</button>
+                            <button type="button" class="skill-chip" data-skill="TypeScript">TypeScript</button>
+                            <button type="button" class="skill-chip" data-skill="Kotlin">Kotlin</button>
+                        </div>
+
+                    </div>
+
+                    <div class="skill-category">
+
+                        <h3>Web Development</h3>
+
+                        <div class="skill-options">
+                            <button type="button" class="skill-chip" data-skill="HTML">HTML</button>
+                            <button type="button" class="skill-chip" data-skill="CSS">CSS</button>
+                            <button type="button" class="skill-chip" data-skill="Flask">Flask</button>
+                            <button type="button" class="skill-chip" data-skill="Django">Django</button>
+                            <button type="button" class="skill-chip" data-skill="React">React</button>
+                            <button type="button" class="skill-chip" data-skill="Node.js">Node.js</button>
+                            <button type="button" class="skill-chip" data-skill="REST API">REST API</button>
+                            <button type="button" class="skill-chip" data-skill="Bootstrap">Bootstrap</button>
+                        </div>
+
+                    </div>
+
+                    <div class="skill-category">
+
+                        <h3>Database & Data</h3>
+
+                        <div class="skill-options">
+                            <button type="button" class="skill-chip" data-skill="SQL">SQL</button>
+                            <button type="button" class="skill-chip" data-skill="SQLite">SQLite</button>
+                            <button type="button" class="skill-chip" data-skill="MySQL">MySQL</button>
+                            <button type="button" class="skill-chip" data-skill="MongoDB">MongoDB</button>
+                            <button type="button" class="skill-chip" data-skill="Pandas">Pandas</button>
+                            <button type="button" class="skill-chip" data-skill="NumPy">NumPy</button>
+                            <button type="button" class="skill-chip" data-skill="Power BI">Power BI</button>
+                            <button type="button" class="skill-chip" data-skill="Excel">Excel</button>
+                        </div>
+
+                    </div>
+
+                    <div class="skill-category">
+
+                        <h3>AI & Machine Learning</h3>
+
+                        <div class="skill-options">
+                            <button type="button" class="skill-chip" data-skill="Machine Learning">Machine Learning</button>
+                            <button type="button" class="skill-chip" data-skill="Scikit-learn">Scikit-learn</button>
+                            <button type="button" class="skill-chip" data-skill="Data Analysis">Data Analysis</button>
+                            <button type="button" class="skill-chip" data-skill="NLP">NLP</button>
+                            <button type="button" class="skill-chip" data-skill="TensorFlow">TensorFlow</button>
+                            <button type="button" class="skill-chip" data-skill="Data Visualization">Data Visualization</button>
+                        </div>
+
+                    </div>
+
+                    <div class="skill-category">
+
+                        <h3>Tools & Professional Skills</h3>
+
+                        <div class="skill-options">
+                            <button type="button" class="skill-chip" data-skill="Git">Git</button>
+                            <button type="button" class="skill-chip" data-skill="GitHub">GitHub</button>
+                            <button type="button" class="skill-chip" data-skill="VS Code">VS Code</button>
+                            <button type="button" class="skill-chip" data-skill="Linux">Linux</button>
+                            <button type="button" class="skill-chip" data-skill="Problem Solving">Problem Solving</button>
+                            <button type="button" class="skill-chip" data-skill="Communication">Communication</button>
+                            <button type="button" class="skill-chip" data-skill="Teamwork">Teamwork</button>
+                            <button type="button" class="skill-chip" data-skill="Leadership">Leadership</button>
+                        </div>
+
+                    </div>
+
+                </section>
+
+                <div class="skills-actions">
+
+                    <a href="{{ url_for('dashboard') }}"
+                       class="cancel-button">
+                        Cancel
+                    </a>
+
+                    <button type="submit"
+                            class="save-button">
+                        Save My Skills
+                        <span>→</span>
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </main>
+
+</div>
+
+<script src="{{ url_for('static', filename='js/skills.js') }}"></script>
+
+</body>
+</html>

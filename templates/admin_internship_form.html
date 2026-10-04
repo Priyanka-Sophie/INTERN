@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        {% if form_mode == "edit" %}
+            Edit Internship | INTERN
+        {% else %}
+            Add Internship | INTERN
+        {% endif %}
+    </title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/admin.css') }}"
+    >
+</head>
+
+<body>
+
+    <div class="app-shell">
+
+        <aside class="sidebar">
+
+            <a href="{{ url_for('admin_dashboard') }}" class="brand">
+
+                <div class="brand-mark"></div>
+
+                <div class="brand-text">
+                    <span class="brand-name">INTERN</span>
+                    <span class="brand-subtitle">SMART INTERNSHIP DISCOVERY</span>
+                </div>
+
+            </a>
+
+            <nav class="sidebar-nav">
+
+                <div class="nav-label">
+                    ADMIN PORTAL
+                </div>
+
+                <a
+                    href="{{ url_for('admin_dashboard') }}"
+                    class="nav-item"
+                >
+                    <span class="nav-icon">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path d="M4 13h6V4H4v9Z" stroke="currentColor" stroke-width="1.8"/>
+                            <path d="M14 20h6v-9h-6v9Z" stroke="currentColor" stroke-width="1.8"/>
+                            <path d="M14 8h6V4h-6v4Z" stroke="currentColor" stroke-width="1.8"/>
+                            <path d="M4 20h6v-3H4v3Z" stroke="currentColor" stroke-width="1.8"/>
+                        </svg>
+                    </span>
+
+                    <span>Dashboard</span>
+                </a>
+
+                <a
+                    href="{{ url_for('admin_internships') }}"
+                    class="nav-item"
+                >
+                    <span class="nav-icon">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path d="M4 7.5h16v11H4v-11Z" stroke="currentColor" stroke-width="1.8"/>
+                            <path d="M9 7.5V5.8A1.8 1.8 0 0 1 10.8 4h2.4A1.8 1.8 0 0 1 15 5.8v1.7" stroke="currentColor" stroke-width="1.8"/>
+                            <path d="M4 12h16" stroke="currentColor" stroke-width="1.8"/>
+                            <path d="M10 12v2h4v-2" stroke="currentColor" stroke-width="1.8"/>
+                        </svg>
+                    </span>
+
+                    <span>Internships</span>
+                </a>
+
+                <a
+                    href="{{ url_for('admin_add_internship') }}"
+                    class="nav-item active"
+                >
+                    <span class="nav-icon">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path d="M12 5v14" stroke="currentColor" stroke-width="1.8"/>
+                            <path d="M5 12h14" stroke="currentColor" stroke-width="1.8"/>
+                            <rect x="3.5" y="3.5" width="17" height="17" rx="4" stroke="currentColor" stroke-width="1.5"/>
+                        </svg>
+                    </span>
+
+                    <span>
+                        {% if form_mode == "edit" %}
+                            Edit Internship
+                        {% else %}
+                            Add Internship
+                        {% endif %}
+                    </span>
+                </a>
+
+                <a
+                    href="{{ url_for('admin_students') }}"
+                    class="nav-item"
+                >
+                    <span class="nav-icon">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path d="M8 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" stroke="currentColor" stroke-width="1.7"/>
+                            <path d="M16.5 10a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" stroke="currentColor" stroke-width="1.7"/>
+                            <path d="M3 19c.3-3.3 2.2-5 5-5s4.7 1.7 5 5" stroke="currentColor" stroke-width="1.7"/>
+                            <path d="M14 14c3.8-.5 6.3 1.1 7 4" stroke="currentColor" stroke-width="1.7"/>
+                        </svg>
+                    </span>
+
+                    <span>Students</span>
+                </a>
+
+                <a
+                    href="{{ url_for('admin_reports') }}"
+                    class="nav-item"
+                >
+                    <span class="nav-icon">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path d="M5 19V9" stroke="currentColor" stroke-width="1.8"/>
+                            <path d="M12 19V5" stroke="currentColor" stroke-width="1.8"/>
+                            <path d="M19 19v-7" stroke="currentColor" stroke-width="1.8"/>
+                            <path d="M3 19h18" stroke="currentColor" stroke-width="1.8"/>
+                        </svg>
+                    </span>
+
+                    <span>Reports</span>
+                </a>
+
+                <div class="nav-label nav-label-secondary">
+                    ACCOUNT
+                </div>
+
+                <a
+                    href="{{ url_for('admin_logout') }}"
+                    class="nav-item logout-item"
+                >
+                    <span class="nav-icon">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path d="M10 5H5v14h5" stroke="currentColor" stroke-width="1.8"/>
+                            <path d="M14 8l4 4-4 4" stroke="currentColor" stroke-width="1.8"/>
+                            <path d="M18 12H9" stroke="currentColor" stroke-width="1.8"/>
+                        </svg>
+                    </span>
+
+                    <span>Logout</span>
+                </a>
+
+            </nav>
+
+            <div class="sidebar-footer">
+
+                <div class="admin-mini-avatar">
+                    {{ admin['full_name'][0]|upper }}
+                </div>
+
+                <div class="admin-mini-copy">
+                    <strong>{{ admin['full_name'] }}</strong>
+                    <span>Administrator</span>
+                </div>
+
+            </div>
+
+        </aside>
+
+        <main class="main-area">
+
+            <header class="topbar">
+
+                <div class="topbar-title">
+                    Admin Portal
+                </div>
+
+                <div class="topbar-admin">
+
+                    <div class="topbar-admin-copy">
+                        <strong>{{ admin['full_name'] }}</strong>
+                        <span>{{ admin['email'] }}</span>
+                    </div>
+
+                    <div class="topbar-avatar">
+                        {{ admin['full_name'][0]|upper }}
+                    </div>
+
+                </div>
+
+            </header>
+
+            <div class="page-content">
+
+                {% with messages = get_flashed_messages(with_categories=true) %}
+
+                    {% if messages %}
+
+                        <div class="dashboard-flash-area">
+
+                            {% for category, message in messages %}
+
+                                <div class="flash-message {{ category }}">
+                                    {{ message }}
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+                    {% endif %}
+
+                {% endwith %}
+
+                <div class="admin-management-header">
+
+                    <div>
+
+                        <span class="section-eyebrow">
+                            INTERNSHIP MANAGEMENT
+                        </span>
+
+                        <h1>
+                            {% if form_mode == "edit" %}
+                                Edit Internship
+                            {% else %}
+                                Add Internship
+                            {% endif %}
+                        </h1>
+
+                        <p>
+                            {% if form_mode == "edit" %}
+                                Update the internship opportunity and save the
+                                changes to the INTERN internship database.
+                            {% else %}
+                                Create a new internship opportunity for students
+                                using the INTERN platform.
+                            {% endif %}
+                        </p>
+
+                    </div>
+
+                    <a
+                        href="{{ url_for('admin_internships') }}"
+                        class="admin-secondary-button"
+                    >
+                        ← Back to Internships
+                    </a>
+
+                </div>
+
+                <section class="admin-form-panel">
+
+                    {% if form_mode == "edit" %}
+
+                        <form
+                            method="POST"
+                            action="{{ url_for('admin_edit_internship', internship_id=internship['id']) }}"
+                            class="admin-internship-form"
+                        >
+
+                    {% else %}
+
+                        <form
+                            method="POST"
+                            action="{{ url_for('admin_add_internship') }}"
+                            class="admin-internship-form"
+                        >
+
+                    {% endif %}
+
+                        <div class="admin-form-section">
+
+                            <div class="admin-form-section-heading">
+
+                                <div>
+                                    <span>01</span>
+                                </div>
+
+                                <div>
+                                    <h2>Basic Information</h2>
+                                    <p>
+                                        Enter the company, role and general
+                                        internship information.
+                                    </p>
+                                </div>
+
+                            </div>
+
+                            <div class="admin-form-grid">
+
+                                <div class="admin-form-field">
+
+                                    <label for="company_name">
+                                        Company Name *
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        id="company_name"
+                                        name="company_name"
+                                        value="{{ internship['company_name'] if internship else '' }}"
+                                        placeholder="Example: Infosys"
+                                        maxlength="150"
+                                        required
+                                    >
+
+                                </div>
+
+                                <div class="admin-form-field">
+
+                                    <label for="role_title">
+                                        Role Title *
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        id="role_title"
+                                        name="role_title"
+                                        value="{{ internship['role_title'] if internship else '' }}"
+                                        placeholder="Example: Software Developer Intern"
+                                        maxlength="150"
+                                        required
+                                    >
+
+                                </div>
+
+                                <div class="admin-form-field">
+
+                                    <label for="location">
+                                        Location
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        id="location"
+                                        name="location"
+                                        value="{{ internship['location'] if internship and internship['location'] else '' }}"
+                                        placeholder="Example: Bengaluru"
+                                        maxlength="120"
+                                    >
+
+                                </div>
+
+                                <div class="admin-form-field">
+
+                                    <label for="work_mode">
+                                        Work Mode *
+                                    </label>
+
+                                    <select
+                                        id="work_mode"
+                                        name="work_mode"
+                                        required
+                                    >
+
+                                        <option value="" disabled
+                                            {% if not internship %}selected{% endif %}
+                                        >
+                                            Select work mode
+                                        </option>
+
+                                        <option
+                                            value="On-site"
+                                            {% if internship and internship['work_mode'] == 'On-site' %}selected{% endif %}
+                                        >
+                                            On-site
+                                        </option>
+
+                                        <option
+                                            value="Remote"
+                                            {% if internship and internship['work_mode'] == 'Remote' %}selected{% endif %}
+                                        >
+                                            Remote
+                                        </option>
+
+                                        <option
+                                            value="Hybrid"
+                                            {% if internship and internship['work_mode'] == 'Hybrid' %}selected{% endif %}
+                                        >
+                                            Hybrid
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+                                <div class="admin-form-field">
+
+                                    <label for="duration">
+                                        Duration
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        id="duration"
+                                        name="duration"
+                                        value="{{ internship['duration'] if internship and internship['duration'] else '' }}"
+                                        placeholder="Example: 3 Months"
+                                        maxlength="80"
+                                    >
+
+                                </div>
+
+                                <div class="admin-form-field">
+
+                                    <label for="stipend">
+                                        Stipend
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        id="stipend"
+                                        name="stipend"
+                                        value="{{ internship['stipend'] if internship and internship['stipend'] else '' }}"
+                                        placeholder="Example: ₹15,000 / month"
+                                        maxlength="100"
+                                    >
+
+                                </div>
+
+                                <div class="admin-form-field admin-form-field-full">
+
+                                    <label for="description">
+                                        Internship Description
+                                    </label>
+
+                                    <textarea
+                                        id="description"
+                                        name="description"
+                                        placeholder="Describe the internship responsibilities, work and learning opportunities..."
+                                    >{{ internship['description'] if internship and internship['description'] else '' }}</textarea>
+
+                                    <small>
+                                        Optional
+                                    </small>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="admin-form-section">
+
+                            <div class="admin-form-section-heading">
+
+                                <div>
+                                    <span>02</span>
+                                </div>
+
+                                <div>
+                                    <h2>Skills & Eligibility</h2>
+                                    <p>
+                                        Define the skills and student eligibility
+                                        requirements for this opportunity.
+                                    </p>
+                                </div>
+
+                            </div>
+
+                            <div class="admin-form-grid">
+
+                                <div class="admin-form-field admin-form-field-full">
+
+                                    <label for="required_skills">
+                                        Required Skills *
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        id="required_skills"
+                                        name="required_skills"
+                                        value="{{ internship['required_skills'] if internship and internship['required_skills'] else '' }}"
+                                        placeholder="Python, Flask, SQL, HTML, CSS"
+                                        required
+                                    >
+
+                                    <small>
+                                        Separate multiple skills using commas.
+                                    </small>
+
+                                </div>
+
+                                <div class="admin-form-field">
+
+                                    <label for="eligible_courses">
+                                        Eligible Courses
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        id="eligible_courses"
+                                        name="eligible_courses"
+                                        value="{{ internship['eligible_courses'] if internship and internship['eligible_courses'] else '' }}"
+                                        placeholder="B.Sc, BCA, B.Tech"
+                                    >
+
+                                    <small>
+                                        Separate multiple courses using commas.
+                                    </small>
+
+                                </div>
+
+                                <div class="admin-form-field">
+
+                                    <label for="eligible_branches">
+                                        Eligible Branches
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        id="eligible_branches"
+                                        name="eligible_branches"
+                                        value="{{ internship['eligible_branches'] if internship and internship['eligible_branches'] else '' }}"
+                                        placeholder="Computer Science, IT"
+                                    >
+
+                                    <small>
+                                        Separate multiple branches using commas.
+                                    </small>
+
+                                </div>
+
+                                <div class="admin-form-field">
+
+                                    <label for="eligible_years">
+                                        Eligible Years
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        id="eligible_years"
+                                        name="eligible_years"
+                                        value="{{ internship['eligible_years'] if internship and internship['eligible_years'] else '' }}"
+                                        placeholder="2, 3, 4"
+                                    >
+
+                                    <small>
+                                        Example: 2, 3 or 2, 3, 4.
+                                    </small>
+
+                                </div>
+
+                                <div class="admin-form-field">
+
+                                    <label for="minimum_score">
+                                        Minimum Academic Score
+                                    </label>
+
+                                    <input
+                                        type="number"
+                                        id="minimum_score"
+                                        name="minimum_score"
+                                        value="{{ internship['minimum_score'] if internship and internship['minimum_score'] is not none else '' }}"
+                                        placeholder="Example: 60"
+                                        min="0"
+                                        step="0.01"
+                                    >
+
+                                </div>
+
+                                <div class="admin-form-field">
+
+                                    <label for="score_type">
+                                        Score Type
+                                    </label>
+
+                                    <select
+                                        id="score_type"
+                                        name="score_type"
+                                    >
+
+                                        <option value="">
+                                            Not specified
+                                        </option>
+
+                                        <option
+                                            value="Percentage"
+                                            {% if internship and internship['score_type'] == 'Percentage' %}selected{% endif %}
+                                        >
+                                            Percentage
+                                        </option>
+
+                                        <option
+                                            value="CGPA"
+                                            {% if internship and internship['score_type'] == 'CGPA' %}selected{% endif %}
+                                        >
+                                            CGPA
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+                                <div class="admin-form-field">
+
+                                    <label for="openings">
+                                        Number of Openings
+                                    </label>
+
+                                    <input
+                                        type="number"
+                                        id="openings"
+                                        name="openings"
+                                        value="{{ internship['openings'] if internship and internship['openings'] is not none else '' }}"
+                                        placeholder="Example: 5"
+                                        min="1"
+                                        step="1"
+                                    >
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="admin-form-section">
+
+                            <div class="admin-form-section-heading">
+
+                                <div>
+                                    <span>03</span>
+                                </div>
+
+                                <div>
+                                    <h2>Application Details</h2>
+                                    <p>
+                                        Add the application deadline, application
+                                        link and internship status.
+                                    </p>
+                                </div>
+
+                            </div>
+
+                            <div class="admin-form-grid">
+
+                                <div class="admin-form-field">
+
+                                    <label for="application_deadline">
+                                        Application Deadline
+                                    </label>
+
+                                    <input
+                                        type="date"
+                                        id="application_deadline"
+                                        name="application_deadline"
+                                        value="{{ internship['application_deadline'] if internship and internship['application_deadline'] else '' }}"
+                                    >
+
+                                </div>
+
+                                <div class="admin-form-field">
+
+                                    <label for="status">
+                                        Status *
+                                    </label>
+
+                                    <select
+                                        id="status"
+                                        name="status"
+                                        required
+                                    >
+
+                                        <option
+                                            value="Active"
+                                            {% if not internship or internship['status'] == 'Active' %}selected{% endif %}
+                                        >
+                                            Active
+                                        </option>
+
+                                        <option
+                                            value="Inactive"
+                                            {% if internship and internship['status'] == 'Inactive' %}selected{% endif %}
+                                        >
+                                            Inactive
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+                                <div class="admin-form-field admin-form-field-full">
+
+                                    <label for="application_link">
+                                        Application Link
+                                    </label>
+
+                                    <input
+                                        type="url"
+                                        id="application_link"
+                                        name="application_link"
+                                        value="{{ internship['application_link'] if internship and internship['application_link'] else '' }}"
+                                        placeholder="https://company.com/internship/apply"
+                                    >
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="admin-form-actions">
+
+                            <a
+                                href="{{ url_for('admin_internships') }}"
+                                class="admin-secondary-button"
+                            >
+                                Cancel
+                            </a>
+
+                            <button
+                                type="submit"
+                                class="admin-primary-button"
+                            >
+                                {% if form_mode == "edit" %}
+                                    Save Changes
+                                {% else %}
+                                    Add Internship
+                                {% endif %}
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </section>
+
+            </div>
+
+        </main>
+
+    </div>
+
+</body>
+
+</html>

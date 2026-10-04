@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Resume Analysis | INTERN</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/resume.css') }}">
+</head>
+
+<body>
+
+<div class="resume-layout">
+
+    <aside class="resume-sidebar">
+
+        <a href="{{ url_for('dashboard') }}" class="brand">
+
+            <div class="brand-mark">↗</div>
+
+            <div class="brand-copy">
+                <strong>INTERN</strong>
+                <span>SMART INTERNSHIP DISCOVERY</span>
+            </div>
+
+        </a>
+
+        <div class="sidebar-label">
+            STUDENT PORTAL
+        </div>
+
+        <nav class="sidebar-nav">
+
+            <a href="{{ url_for('dashboard') }}">
+                <span class="nav-icon">⌂</span>
+                Dashboard
+            </a>
+
+            <a href="{{ url_for('profile') }}">
+                <span class="nav-icon">◯</span>
+                My Profile
+            </a>
+
+            <a href="{{ url_for('skills') }}">
+                <span class="nav-icon">◇</span>
+                My Skills
+            </a>
+
+            <a href="{{ url_for('resume') }}" class="active">
+                <span class="nav-icon">▤</span>
+                Resume
+            </a>
+
+            <a href="{{ url_for('internships') }}">
+                <span class="nav-icon">⌕</span>
+                Find Internships
+            </a>
+
+            <a href="{{ url_for('recommendations') }}">
+                <span class="nav-icon">✦</span>
+                Recommendations
+            </a>
+
+            <a href="{{ url_for('skill_gap') }}">
+                <span class="nav-icon">↗</span>
+                Skill Gap
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <div class="student-mini-card">
+
+                <div class="student-avatar">
+                    {{ student["full_name"][0]|upper }}
+                </div>
+
+                <div class="student-mini-info">
+                    <strong>{{ student["full_name"] }}</strong>
+                    <span>{{ student["student_id"] }}</span>
+                </div>
+
+            </div>
+
+            <a href="{{ url_for('logout') }}" class="logout-link">
+                <span class="nav-icon">↪</span>
+                Log out
+            </a>
+
+        </div>
+
+    </aside>
+
+    <main class="resume-main">
+
+        <header class="resume-topbar">
+
+            <div class="topbar-title">
+                <span>RESUME ANALYSIS</span>
+                <strong>Resume Intelligence</strong>
+            </div>
+
+            <a href="{{ url_for('dashboard') }}"
+               class="dashboard-link">
+                ← Back to Dashboard
+            </a>
+
+        </header>
+
+        <div class="resume-content">
+
+            <section class="page-heading">
+
+                <span class="page-kicker">
+                    RESUME INTELLIGENCE
+                </span>
+
+                <h1>Turn your resume into useful insights.</h1>
+
+                <p>
+                    Upload your resume and INTERN will extract readable
+                    information to identify skills, education and experience
+                    that can later improve your internship recommendations.
+                </p>
+
+            </section>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+
+                {% if messages %}
+
+                    <div class="flash-container">
+
+                        {% for category, message in messages %}
+
+                            <div class="flash-message {{ category }}">
+                                {{ message }}
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                {% endif %}
+
+            {% endwith %}
+
+            {% if not resume %}
+
+                <section class="upload-card">
+
+                    <div class="section-heading">
+
+                        <div class="section-number">
+                            01
+                        </div>
+
+                        <div>
+
+                            <h2>Upload your resume</h2>
+
+                            <p>
+                                Upload a text-based PDF resume or CV.
+                                INTERN verifies the document before saving it.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <form method="POST"
+                          action="{{ url_for('resume') }}"
+                          enctype="multipart/form-data"
+                          id="resume-form">
+
+                        <label for="resume-file"
+                               class="upload-zone"
+                               id="upload-zone">
+
+                            <div class="upload-icon">
+                                ↑
+                            </div>
+
+                            <strong>
+                                Choose your resume PDF
+                            </strong>
+
+                            <p>
+                                Click here to browse your computer
+                            </p>
+
+                            <span>
+                                PDF only · Maximum file size 5 MB
+                            </span>
+
+                            <input type="file"
+                                   id="resume-file"
+                                   name="resume"
+                                   accept=".pdf,application/pdf"
+                                   required>
+
+                        </label>
+
+                        <div class="selected-file"
+                             id="selected-file">
+
+                            <div class="selected-file-icon">
+                                PDF
+                            </div>
+
+                            <div class="selected-file-info">
+
+                                <span id="selected-file-label">
+                                    SELECTED FILE
+                                </span>
+
+                                <strong id="selected-file-name">
+                                    No file selected
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                        <div class="upload-actions">
+
+                            <a href="{{ url_for('dashboard') }}"
+                               class="secondary-button">
+                                Cancel
+                            </a>
+
+                            <button type="submit"
+                                    class="primary-button"
+                                    id="analyze-button">
+                                Upload & Analyze →
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </section>
+
+                <section class="before-analysis-card">
+
+                    <div class="before-analysis-icon">
+                        ✦
+                    </div>
+
+                    <div>
+
+                        <span>DOCUMENT VALIDATION</span>
+
+                        <h3>Only a valid resume or CV will be accepted.</h3>
+
+                        <p>
+                            INTERN checks the PDF format, file size,
+                            readable text and resume-related information
+                            before the document is stored and analyzed.
+                        </p>
+
+                    </div>
+
+                </section>
+
+            {% else %}
+
+                <section class="resume-status-card">
+
+                    <div class="resume-status-left">
+
+                        <div class="pdf-icon">
+                            PDF
+                        </div>
+
+                        <div class="resume-file-details">
+
+                            <span>ACTIVE RESUME</span>
+
+                            <h2>
+                                {{ resume["original_filename"] }}
+                            </h2>
+
+                            <p>
+                                Verified, uploaded and analyzed successfully.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="analysis-complete-badge">
+                        ✓ Analysis Complete
+                    </div>
+
+                </section>
+
+                <section class="analysis-intro">
+
+                    <span class="page-kicker">
+                        EXTRACTED INFORMATION
+                    </span>
+
+                    <h2>
+                        What INTERN found in your resume
+                    </h2>
+
+                    <p>
+                        These results were extracted from the readable
+                        information in your uploaded resume.
+                    </p>
+
+                </section>
+
+                <div class="analysis-grid">
+
+                    <section class="analysis-card skills-analysis">
+
+                        <div class="analysis-card-header">
+
+                            <div class="analysis-icon">
+                                ✦
+                            </div>
+
+                            <div>
+
+                                <span>SKILLS</span>
+
+                                <h3>
+                                    Detected Skills
+                                </h3>
+
+                            </div>
+
+                        </div>
+
+                        {% if detected_skills %}
+
+                            <div class="detected-skills">
+
+                                {% for skill in detected_skills %}
+
+                                    <span class="detected-skill">
+                                        {{ skill }}
+                                    </span>
+
+                                {% endfor %}
+
+                            </div>
+
+                            <p class="analysis-note">
+
+                                {{ detected_skills|length }}
+
+                                skill{% if detected_skills|length != 1 %}s{% endif %}
+
+                                detected from your resume.
+
+                            </p>
+
+                        {% else %}
+
+                            <div class="empty-analysis">
+
+                                <span>—</span>
+
+                                <p>
+                                    No skills from INTERN's current
+                                    skill dictionary were clearly detected.
+                                </p>
+
+                            </div>
+
+                        {% endif %}
+
+                    </section>
+
+                    <section class="analysis-card">
+
+                        <div class="analysis-card-header">
+
+                            <div class="analysis-icon">
+                                🎓
+                            </div>
+
+                            <div>
+
+                                <span>EDUCATION</span>
+
+                                <h3>
+                                    Education Signals
+                                </h3>
+
+                            </div>
+
+                        </div>
+
+                        <p class="analysis-text">
+                            {{ resume["detected_education"] }}
+                        </p>
+
+                    </section>
+
+                    <section class="analysis-card">
+
+                        <div class="analysis-card-header">
+
+                            <div class="analysis-icon">
+                                ◫
+                            </div>
+
+                            <div>
+
+                                <span>EXPERIENCE</span>
+
+                                <h3>
+                                    Experience & Projects
+                                </h3>
+
+                            </div>
+
+                        </div>
+
+                        <p class="analysis-text">
+                            {{ resume["detected_experience"] }}
+                        </p>
+
+                    </section>
+
+                    <section class="analysis-card">
+
+                        <div class="analysis-card-header">
+
+                            <div class="analysis-icon">
+                                ▤
+                            </div>
+
+                            <div>
+
+                                <span>DOCUMENT</span>
+
+                                <h3>
+                                    Resume Text
+                                </h3>
+
+                            </div>
+
+                        </div>
+
+                        <div class="text-preview">
+                            {{ resume["extracted_text"] }}
+                        </div>
+
+                    </section>
+
+                </div>
+
+                <section class="replace-card">
+
+                    <div>
+
+                        <span class="replace-kicker">
+                            UPDATE RESUME
+                        </span>
+
+                        <h2>
+                            Replace your current resume
+                        </h2>
+
+                        <p>
+                            The new document must also be a valid PDF
+                            resume or CV and must not exceed 5 MB.
+                        </p>
+
+                    </div>
+
+                    <form method="POST"
+                          action="{{ url_for('resume') }}"
+                          enctype="multipart/form-data"
+                          id="replace-resume-form">
+
+                        <input type="file"
+                               id="replace-resume-file"
+                               name="resume"
+                               accept=".pdf,application/pdf"
+                               required>
+
+                        <label for="replace-resume-file"
+                               class="choose-new-button"
+                               id="choose-new-button">
+                            Choose New PDF
+                        </label>
+
+                        <span id="replacement-file-name"
+                              class="replacement-file-name">
+                            No new file selected
+                        </span>
+
+                        <button type="submit"
+                                class="primary-button replace-button"
+                                id="replace-button">
+                            Replace & Analyze →
+                        </button>
+
+                    </form>
+
+                </section>
+
+                <section class="next-step-card">
+
+                    <div class="next-step-number">
+                        NEXT
+                    </div>
+
+                    <div class="next-step-copy">
+
+                        <span>PROFILE READY</span>
+
+                        <h2>
+                            Your internship profile is now complete.
+                        </h2>
+
+                        <p>
+                            Your academic profile, skills and verified
+                            resume analysis are ready for internship
+                            discovery and personalized recommendations.
+                        </p>
+
+                    </div>
+
+                    <a href="{{ url_for('recommendations') }}"
+                       class="next-step-button">
+                        View Recommendations →
+                    </a>
+
+                </section>
+
+            {% endif %}
+
+        </div>
+
+    </main>
+
+</div>
+
+<script>
+    const MAX_FILE_SIZE = 5 * 1024 * 1024;
+
+    const resumeFile = document.getElementById("resume-file");
+    const selectedFileName = document.getElementById("selected-file-name");
+    const selectedFileLabel = document.getElementById("selected-file-label");
+    const selectedFile = document.getElementById("selected-file");
+    const uploadZone = document.getElementById("upload-zone");
+    const analyzeButton = document.getElementById("analyze-button");
+
+    function isPdfFile(file) {
+        const fileName = file.name.toLowerCase();
+
+        return (
+            fileName.endsWith(".pdf") &&
+            (
+                file.type === "application/pdf" ||
+                file.type === ""
+            )
+        );
+    }
+
+    function resetMainUpload() {
+        if (!resumeFile) {
+            return;
+        }
+
+        resumeFile.value = "";
+
+        if (selectedFile) {
+            selectedFile.classList.remove("has-file");
+        }
+
+        if (uploadZone) {
+            uploadZone.classList.remove("has-file");
+        }
+
+        if (selectedFileName) {
+            selectedFileName.textContent = "No file selected";
+            selectedFileName.style.color = "";
+        }
+
+        if (selectedFileLabel) {
+            selectedFileLabel.textContent = "SELECTED FILE";
+            selectedFileLabel.style.color = "";
+        }
+
+        if (analyzeButton) {
+            analyzeButton.disabled = false;
+        }
+    }
+
+    function showMainUploadError(message) {
+        if (selectedFile) {
+            selectedFile.classList.add("has-file");
+        }
+
+        if (uploadZone) {
+            uploadZone.classList.remove("has-file");
+        }
+
+        if (selectedFileLabel) {
+            selectedFileLabel.textContent = "FILE REJECTED";
+            selectedFileLabel.style.color = "#dc2626";
+        }
+
+        if (selectedFileName) {
+            selectedFileName.textContent = message;
+            selectedFileName.style.color = "#dc2626";
+        }
+
+        if (analyzeButton) {
+            analyzeButton.disabled = true;
+        }
+    }
+
+    if (resumeFile) {
+        resumeFile.addEventListener("change", function () {
+            if (!resumeFile.files.length) {
+                resetMainUpload();
+                return;
+            }
+
+            const file = resumeFile.files[0];
+
+            if (!isPdfFile(file)) {
+                resumeFile.value = "";
+
+                showMainUploadError(
+                    "Only PDF resume or CV files are allowed."
+                );
+
+                return;
+            }
+
+            if (file.size <= 0) {
+                resumeFile.value = "";
+
+                showMainUploadError(
+                    "This PDF is empty. Please choose another resume."
+                );
+
+                return;
+            }
+
+            if (file.size > MAX_FILE_SIZE) {
+                resumeFile.value = "";
+
+                showMainUploadError(
+                    "File rejected. Resume PDF must be 5 MB or smaller."
+                );
+
+                return;
+            }
+
+            selectedFile.classList.add("has-file");
+            uploadZone.classList.add("has-file");
+
+            selectedFileLabel.textContent = "SELECTED FILE";
+            selectedFileLabel.style.color = "";
+
+            selectedFileName.textContent = file.name;
+            selectedFileName.style.color = "";
+
+            analyzeButton.disabled = false;
+        });
+    }
+
+    const replacementFile = document.getElementById("replace-resume-file");
+    const replacementFileName = document.getElementById("replacement-file-name");
+    const replaceButton = document.getElementById("replace-button");
+
+    function resetReplacementUpload() {
+        if (!replacementFile) {
+            return;
+        }
+
+        replacementFile.value = "";
+
+        if (replacementFileName) {
+            replacementFileName.textContent = "No new file selected";
+            replacementFileName.style.color = "";
+        }
+
+        if (replaceButton) {
+            replaceButton.disabled = false;
+        }
+    }
+
+    function showReplacementError(message) {
+        if (replacementFileName) {
+            replacementFileName.textContent = message;
+            replacementFileName.style.color = "#dc2626";
+        }
+
+        if (replaceButton) {
+            replaceButton.disabled = true;
+        }
+    }
+
+    if (replacementFile) {
+        replacementFile.addEventListener("change", function () {
+            if (!replacementFile.files.length) {
+                resetReplacementUpload();
+                return;
+            }
+
+            const file = replacementFile.files[0];
+
+            if (!isPdfFile(file)) {
+                replacementFile.value = "";
+
+                showReplacementError(
+                    "Only PDF resume or CV files are allowed."
+                );
+
+                return;
+            }
+
+            if (file.size <= 0) {
+                replacementFile.value = "";
+
+                showReplacementError(
+                    "This PDF is empty. Please choose another resume."
+                );
+
+                return;
+            }
+
+            if (file.size > MAX_FILE_SIZE) {
+                replacementFile.value = "";
+
+                showReplacementError(
+                    "File rejected. Resume PDF must be 5 MB or smaller."
+                );
+
+                return;
+            }
+
+            replacementFileName.textContent = file.name;
+            replacementFileName.style.color = "";
+            replaceButton.disabled = false;
+        });
+    }
+</script>
+
+</body>
+</html>

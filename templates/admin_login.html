@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Login | INTERN</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/admin_login.css') }}"
+    >
+</head>
+
+<body>
+
+    <main class="admin-auth-page">
+
+        <section class="admin-auth-panel">
+
+            <a href="{{ url_for('home') }}" class="admin-brand">
+
+                <div class="admin-brand-mark"></div>
+
+                <div class="admin-brand-text">
+                    <strong>INTERN</strong>
+                    <span>SMART INTERNSHIP DISCOVERY</span>
+                </div>
+
+            </a>
+
+            <div class="admin-auth-content">
+
+                <div class="admin-auth-heading">
+
+                    <span class="admin-eyebrow">
+                        SECURE ADMIN ACCESS
+                    </span>
+
+                    <h1>
+                        Welcome back.
+                    </h1>
+
+                    <p>
+                        Sign in to manage internships, student records
+                        and platform information.
+                    </p>
+
+                </div>
+
+                {% with messages = get_flashed_messages(with_categories=true) %}
+
+                    {% if messages %}
+
+                        <div class="admin-flash-area">
+
+                            {% for category, message in messages %}
+
+                                <div class="admin-flash-message {{ category }}">
+                                    {{ message }}
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+                    {% endif %}
+
+                {% endwith %}
+
+                <form
+                    method="POST"
+                    action="{{ url_for('admin_login') }}"
+                    class="admin-login-form"
+                >
+
+                    <div class="admin-form-group">
+
+                        <label for="email">
+                            ADMIN EMAIL
+                        </label>
+
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            value="{{ email|default('') }}"
+                            placeholder="Enter your admin email"
+                            autocomplete="email"
+                            maxlength="120"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="admin-form-group">
+
+                        <label for="password">
+                            PASSWORD
+                        </label>
+
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Enter your password"
+                            autocomplete="current-password"
+                            maxlength="128"
+                            required
+                        >
+
+                        <small
+                            class="admin-caps-lock-message"
+                            id="admin-password-caps"
+                        >
+                            Caps Lock is ON
+                        </small>
+
+                    </div>
+
+                    <button
+                        type="submit"
+                        class="admin-login-button"
+                    >
+                        Sign in to Admin Portal
+                        <span>→</span>
+                    </button>
+
+                </form>
+
+                <div class="student-return">
+
+                    <span>
+                        Student account?
+                    </span>
+
+                    <a href="{{ url_for('login') }}">
+                        Student Login →
+                    </a>
+
+                </div>
+
+            </div>
+
+            <div class="admin-panel-footer">
+                INTERN Administration Portal
+            </div>
+
+        </section>
+
+        <section class="admin-auth-visual">
+
+            <div class="visual-decoration visual-decoration-one"></div>
+            <div class="visual-decoration visual-decoration-two"></div>
+
+            <div class="visual-content">
+
+                <span class="visual-eyebrow">
+                    INTERN ADMIN
+                </span>
+
+                <h2>
+                    Manage internship opportunities with confidence.
+                </h2>
+
+                <p class="visual-description">
+                    Keep internship information accurate, maintain student
+                    records and monitor the INTERN platform from one secure
+                    administration workspace.
+                </p>
+
+                <div class="visual-feature-list">
+
+                    <article class="visual-feature">
+
+                        <div class="visual-feature-icon">
+                            01
+                        </div>
+
+                        <div class="visual-feature-copy">
+
+                            <strong>
+                                Internship Management
+                            </strong>
+
+                            <span>
+                                Add, edit and maintain internship opportunities.
+                            </span>
+
+                        </div>
+
+                    </article>
+
+                    <article class="visual-feature">
+
+                        <div class="visual-feature-icon purple">
+                            02
+                        </div>
+
+                        <div class="visual-feature-copy">
+
+                            <strong>
+                                Student Records
+                            </strong>
+
+                            <span>
+                                Review registered students and profile activity.
+                            </span>
+
+                        </div>
+
+                    </article>
+
+                    <article class="visual-feature">
+
+                        <div class="visual-feature-icon cyan">
+                            03
+                        </div>
+
+                        <div class="visual-feature-copy">
+
+                            <strong>
+                                Platform Reports
+                            </strong>
+
+                            <span>
+                                Monitor important internship and student statistics.
+                            </span>
+
+                        </div>
+
+                    </article>
+
+                </div>
+
+            </div>
+
+            <div class="security-note">
+
+                <div class="security-dot"></div>
+
+                <div>
+                    <strong>SECURE AREA</strong>
+                    <span>Authorized administrators only</span>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const passwordInput = document.getElementById("password");
+            const capsLockMessage = document.getElementById("admin-password-caps");
+
+            if (!passwordInput || !capsLockMessage) {
+                return;
+            }
+
+            function checkCapsLock(event) {
+                const capsLockOn =
+                    typeof event.getModifierState === "function" &&
+                    event.getModifierState("CapsLock");
+
+                capsLockMessage.classList.toggle("show", capsLockOn);
+            }
+
+            passwordInput.addEventListener("keydown", checkCapsLock);
+            passwordInput.addEventListener("keyup", checkCapsLock);
+
+            passwordInput.addEventListener("blur", function () {
+                capsLockMessage.classList.remove("show");
+            });
+        });
+    </script>
+
+</body>
+
+</html>

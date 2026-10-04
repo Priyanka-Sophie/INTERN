@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Create Account | INTERN</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/auth.css') }}"
+    >
+</head>
+
+<body class="auth-body">
+
+<div class="auth-layout">
+
+    <section class="auth-brand-panel">
+
+        <a href="{{ url_for('home') }}" class="logo logo-light">
+
+            <span class="logo-mark logo-mark-light"></span>
+
+            <span class="logo-text">
+                <strong>INTERN</strong>
+                <small>SMART INTERNSHIP DISCOVERY</small>
+            </span>
+
+        </a>
+
+        <div class="auth-brand-content">
+
+            <span class="auth-kicker">
+                BUILD YOUR INTERNSHIP PROFILE
+            </span>
+
+            <h1>
+                Find opportunities built
+                <span>around your potential.</span>
+            </h1>
+
+            <p>
+                Create your student account to build your profile,
+                upload your resume and receive relevant internship
+                recommendations.
+            </p>
+
+            <div class="auth-benefits">
+
+                <div>
+                    <span>01</span>
+                    Create your student profile
+                </div>
+
+                <div>
+                    <span>02</span>
+                    Add skills and qualifications
+                </div>
+
+                <div>
+                    <span>03</span>
+                    Receive personalized recommendations
+                </div>
+
+            </div>
+
+        </div>
+
+        <p class="panel-footer">
+            INTERN · Student Internship Recommendation System
+        </p>
+
+    </section>
+
+    <section class="auth-form-panel register-panel">
+
+        <div class="auth-form-container register-container">
+
+            <a href="{{ url_for('home') }}" class="back-link">
+                ← Back to home
+            </a>
+
+            <div class="auth-heading">
+
+                <span class="eyebrow">
+                    CREATE ACCOUNT
+                </span>
+
+                <h2>
+                    Join INTERN.
+                </h2>
+
+                <p>
+                    Enter your details to create your student account.
+                </p>
+
+            </div>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+
+                {% if messages %}
+
+                    <div class="flash-container">
+
+                        {% for category, message in messages %}
+
+                            <div class="flash-message {{ category }}">
+                                {{ message }}
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                {% endif %}
+
+            {% endwith %}
+
+            <form
+                method="POST"
+                action="{{ url_for('register') }}"
+                class="auth-form"
+                id="register-form"
+                novalidate
+            >
+
+                <div class="form-group">
+
+                    <label for="full-name">
+                        Full Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="full-name"
+                        name="full_name"
+                        placeholder="Enter your full name"
+                        value="{{ full_name|default('') }}"
+                        maxlength="50"
+                        autocomplete="name"
+                        required
+                    >
+
+                    <small
+                        class="field-message"
+                        id="name-message"
+                    ></small>
+
+                </div>
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label for="student-id">
+                            Student ID
+                        </label>
+
+                        <input
+                            type="text"
+                            id="student-id"
+                            name="student_id"
+                            placeholder="e.g. 23CS001"
+                            value="{{ student_id|default('') }}"
+                            minlength="3"
+                            maxlength="20"
+                            autocomplete="off"
+                            required
+                        >
+
+                        <small
+                            class="field-message"
+                            id="student-id-message"
+                        ></small>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="email">
+                            Gmail Address
+                        </label>
+
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="yourname@gmail.com"
+                            value="{{ email|default('') }}"
+                            maxlength="40"
+                            autocomplete="email"
+                            inputmode="email"
+                            required
+                        >
+
+                        <small
+                            class="field-message"
+                            id="email-message"
+                        ></small>
+
+                    </div>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="register-password">
+                        Password
+                    </label>
+
+                    <div class="password-wrapper">
+
+                        <input
+                            type="password"
+                            id="register-password"
+                            name="password"
+                            placeholder="Create a strong password"
+                            minlength="8"
+                            maxlength="64"
+                            autocomplete="new-password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            data-target="register-password"
+                        >
+                            Show
+                        </button>
+
+                    </div>
+
+                    <small
+                        class="caps-lock-message"
+                        id="register-password-caps"
+                    >
+                        Caps Lock is ON
+                    </small>
+
+                    <div class="password-rules">
+
+                        <span id="rule-length">
+                            8+ characters
+                        </span>
+
+                        <span id="rule-uppercase">
+                            Uppercase
+                        </span>
+
+                        <span id="rule-lowercase">
+                            Lowercase
+                        </span>
+
+                        <span id="rule-number">
+                            Number
+                        </span>
+
+                        <span id="rule-special">
+                            Special character
+                        </span>
+
+                    </div>
+
+                    <small
+                        class="field-message"
+                        id="password-message"
+                    ></small>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="confirm-password">
+                        Confirm Password
+                    </label>
+
+                    <div class="password-wrapper">
+
+                        <input
+                            type="password"
+                            id="confirm-password"
+                            name="confirm_password"
+                            placeholder="Enter your password again"
+                            minlength="8"
+                            maxlength="64"
+                            autocomplete="new-password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            data-target="confirm-password"
+                        >
+                            Show
+                        </button>
+
+                    </div>
+
+                    <small
+                        class="caps-lock-message"
+                        id="confirm-password-caps"
+                    >
+                        Caps Lock is ON
+                    </small>
+
+                    <small
+                        class="field-message"
+                        id="password-match-message"
+                    ></small>
+
+                </div>
+
+                <label class="checkbox-row">
+
+                    <input
+                        type="checkbox"
+                        id="terms"
+                        name="terms"
+                        required
+                    >
+
+                    <span>
+                        I agree to the Terms of Use and Privacy Policy.
+                    </span>
+
+                </label>
+
+                <small
+                    class="field-message checkbox-message"
+                    id="terms-message"
+                ></small>
+
+                <button
+                    type="submit"
+                    class="btn btn-primary auth-submit"
+                >
+                    Create Account
+                </button>
+
+            </form>
+
+            <div class="auth-switch">
+
+                <span>
+                    Already have an account?
+                </span>
+
+                <a href="{{ url_for('login') }}">
+                    Log in
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+
+</body>
+
+</html>

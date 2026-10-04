@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Profile | INTERN</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/profile.css') }}">
+</head>
+
+<body>
+
+<div class="profile-layout">
+
+    <aside class="profile-sidebar">
+
+        <a href="{{ url_for('dashboard') }}" class="brand">
+            <div class="brand-mark">↗</div>
+
+            <div>
+                <strong>INTERN</strong>
+                <span>SMART INTERNSHIP DISCOVERY</span>
+            </div>
+        </a>
+
+        <div class="sidebar-label">STUDENT PORTAL</div>
+
+        <nav>
+            <a href="{{ url_for('dashboard') }}">
+                <span>⌂</span>
+                Dashboard
+            </a>
+
+            <a href="{{ url_for('profile') }}" class="active">
+                <span>◯</span>
+                My Profile
+            </a>
+
+            <a href="{{ url_for('skills') }}">
+                <span>◇</span>
+                My Skills
+            </a>
+
+            <a href="{{ url_for('resume') }}">
+                <span>▤</span>
+                Resume
+            </a>
+
+            <a href="{{ url_for('internships') }}">
+                <span>⌕</span>
+                Find Internships
+            </a>
+
+            <a href="{{ url_for('recommendations') }}">
+                <span>✦</span>
+                Recommendations
+            </a>
+
+            <a href="{{ url_for('skill_gap') }}">
+                <span>↗</span>
+                Skill Gap
+            </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <div class="student-mini-card">
+                <div class="avatar">
+                    {{ student["full_name"][0]|upper }}
+                </div>
+
+                <div>
+                    <strong>{{ student["full_name"] }}</strong>
+                    <span>{{ student["student_id"] }}</span>
+                </div>
+            </div>
+
+            <a href="{{ url_for('logout') }}" class="logout">
+                <span>↪</span>
+                Log out
+            </a>
+
+        </div>
+
+    </aside>
+
+    <main class="profile-main">
+
+        <header class="profile-topbar">
+
+            <div>
+                <span>STUDENT PROFILE</span>
+                <strong>Profile Information</strong>
+            </div>
+
+            <a href="{{ url_for('dashboard') }}" class="dashboard-link">
+                ← Back to Dashboard
+            </a>
+
+        </header>
+
+        <div class="profile-content">
+
+            <div class="page-heading">
+                <span>YOUR INFORMATION</span>
+
+                <h1>Build your internship profile.</h1>
+
+                <p>
+                    A few quick selections help INTERN understand your
+                    education and the opportunities you're looking for.
+                </p>
+            </div>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-container">
+                        {% for category, message in messages %}
+                            <div class="flash-message {{ category }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            <section class="account-card">
+
+                <div>
+                    <span>FULL NAME</span>
+                    <strong>{{ student["full_name"] }}</strong>
+                </div>
+
+                <div>
+                    <span>STUDENT ID</span>
+                    <strong>{{ student["student_id"] }}</strong>
+                </div>
+
+                <div>
+                    <span>EMAIL</span>
+                    <strong>{{ student["email"] }}</strong>
+                </div>
+
+            </section>
+
+            <form method="POST"
+                  action="{{ url_for('profile') }}"
+                  class="profile-form"
+                  id="profile-form">
+
+                <section class="form-card">
+
+                    <div class="form-card-heading">
+                        <span>01</span>
+
+                        <div>
+                            <h2>Academic Information</h2>
+                            <p>Tell us about your current education.</p>
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+
+                            <label for="course">Course</label>
+
+                            <select id="course" name="course" required>
+                                <option value="">Select your course</option>
+
+                                <option value="B.Sc."
+                                    {% if profile and profile["course"] == "B.Sc." %}selected{% endif %}>
+                                    B.Sc.
+                                </option>
+
+                                <option value="BCA"
+                                    {% if profile and profile["course"] == "BCA" %}selected{% endif %}>
+                                    BCA
+                                </option>
+
+                                <option value="B.Tech"
+                                    {% if profile and profile["course"] == "B.Tech" %}selected{% endif %}>
+                                    B.Tech
+                                </option>
+
+                                <option value="B.E."
+                                    {% if profile and profile["course"] == "B.E." %}selected{% endif %}>
+                                    B.E.
+                                </option>
+
+                                <option value="M.Sc."
+                                    {% if profile and profile["course"] == "M.Sc." %}selected{% endif %}>
+                                    M.Sc.
+                                </option>
+
+                                <option value="MCA"
+                                    {% if profile and profile["course"] == "MCA" %}selected{% endif %}>
+                                    MCA
+                                </option>
+
+                                <option value="M.Tech"
+                                    {% if profile and profile["course"] == "M.Tech" %}selected{% endif %}>
+                                    M.Tech
+                                </option>
+
+                                <option value="Other"
+                                    {% if profile and profile["course"] == "Other" %}selected{% endif %}>
+                                    Other
+                                </option>
+                            </select>
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label for="branch">Branch / Specialization</label>
+
+                            <div class="autocomplete">
+                                <input
+                                    type="text"
+                                    id="branch"
+                                    name="branch"
+                                    maxlength="80"
+                                    autocomplete="off"
+                                    placeholder="Search your branch..."
+                                    value="{{ profile['branch'] if profile else '' }}"
+                                    required>
+
+                                <div id="branch-suggestions"
+                                     class="suggestions"></div>
+                            </div>
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label for="current_year">Current Year</label>
+
+                            <select id="current_year"
+                                    name="current_year"
+                                    required>
+
+                                <option value="">Select current year</option>
+
+                                {% for year in range(1, 7) %}
+                                    <option value="{{ year }}"
+                                        {% if profile and profile["current_year"]|string == year|string %}selected{% endif %}>
+                                        Year {{ year }}
+                                    </option>
+                                {% endfor %}
+
+                            </select>
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label for="graduation_year">
+                                Expected Graduation Year
+                            </label>
+
+                            <input
+                                type="number"
+                                id="graduation_year"
+                                name="graduation_year"
+                                min="2020"
+                                max="2040"
+                                placeholder="e.g. 2027"
+                                value="{{ profile['graduation_year'] if profile else '' }}"
+                                required>
+
+                        </div>
+
+                        <div class="form-group full-width">
+
+                            <label for="college">
+                                College / University
+                            </label>
+
+                            <div class="autocomplete">
+
+                                <div class="search-input-wrap">
+                                    <span>⌕</span>
+
+                                    <input
+                                        type="text"
+                                        id="college"
+                                        name="college"
+                                        maxlength="120"
+                                        autocomplete="off"
+                                        placeholder="Start typing your college or university..."
+                                        value="{{ profile['college'] if profile else '' }}"
+                                        required>
+                                </div>
+
+                                <div id="college-suggestions"
+                                     class="suggestions"></div>
+
+                            </div>
+
+                            <small>
+                                Search and select a suggestion, or enter your institution if it isn't listed.
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+                <section class="form-card">
+
+                    <div class="form-card-heading">
+                        <span>02</span>
+
+                        <div>
+                            <h2>Academic Performance</h2>
+                            <p>Enter your latest academic score.</p>
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+
+                            <label for="score_type">Score Type</label>
+
+                            <select id="score_type"
+                                    name="score_type"
+                                    required>
+
+                                <option value="">Select score type</option>
+
+                                <option value="CGPA"
+                                    {% if profile and profile["score_type"] == "CGPA" %}selected{% endif %}>
+                                    CGPA
+                                </option>
+
+                                <option value="Percentage"
+                                    {% if profile and profile["score_type"] == "Percentage" %}selected{% endif %}>
+                                    Percentage
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label for="academic_score">
+                                Academic Score
+                            </label>
+
+                            <div class="score-input-wrap">
+                                <input
+                                    type="number"
+                                    id="academic_score"
+                                    name="academic_score"
+                                    step="0.01"
+                                    min="0"
+                                    max="100"
+                                    placeholder="Select score type first"
+                                    value="{{ profile['academic_score'] if profile else '' }}"
+                                    required>
+
+                                <span id="score-suffix"></span>
+                            </div>
+
+                            <small id="score-help">
+                                Select CGPA or Percentage first.
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+                <section class="form-card">
+
+                    <div class="form-card-heading">
+                        <span>03</span>
+
+                        <div>
+                            <h2>What interests you?</h2>
+                            <p>
+                                Pick as many areas as you like. No long answers needed.
+                            </p>
+                        </div>
+                    </div>
+
+                    <label class="selection-label">
+                        Areas of Interest
+                    </label>
+
+                    <div class="interest-grid"
+                         id="interest-options">
+
+                        <button type="button"
+                                class="interest-chip"
+                                data-value="Web Development">
+                            <span>🌐</span>
+                            Web Development
+                        </button>
+
+                        <button type="button"
+                                class="interest-chip"
+                                data-value="Software Development">
+                            <span>💻</span>
+                            Software Development
+                        </button>
+
+                        <button type="button"
+                                class="interest-chip"
+                                data-value="Artificial Intelligence">
+                            <span>✦</span>
+                            Artificial Intelligence
+                        </button>
+
+                        <button type="button"
+                                class="interest-chip"
+                                data-value="Machine Learning">
+                            <span>⚙</span>
+                            Machine Learning
+                        </button>
+
+                        <button type="button"
+                                class="interest-chip"
+                                data-value="Data Science">
+                            <span>📊</span>
+                            Data Science
+                        </button>
+
+                        <button type="button"
+                                class="interest-chip"
+                                data-value="Cybersecurity">
+                            <span>🔐</span>
+                            Cybersecurity
+                        </button>
+
+                        <button type="button"
+                                class="interest-chip"
+                                data-value="Cloud Computing">
+                            <span>☁</span>
+                            Cloud Computing
+                        </button>
+
+                        <button type="button"
+                                class="interest-chip"
+                                data-value="Mobile App Development">
+                            <span>📱</span>
+                            App Development
+                        </button>
+
+                        <button type="button"
+                                class="interest-chip"
+                                data-value="UI/UX Design">
+                            <span>◈</span>
+                            UI/UX Design
+                        </button>
+
+                        <button type="button"
+                                class="interest-chip"
+                                data-value="Database Management">
+                            <span>▤</span>
+                            Databases
+                        </button>
+
+                        <button type="button"
+                                class="interest-chip"
+                                data-value="Networking">
+                            <span>◎</span>
+                            Networking
+                        </button>
+
+                        <button type="button"
+                                class="interest-chip"
+                                data-value="DevOps">
+                            <span>↻</span>
+                            DevOps
+                        </button>
+
+                    </div>
+
+                    <input
+                        type="hidden"
+                        id="interests"
+                        name="interests"
+                        value="{{ profile['interests'] if profile else '' }}"
+                        required>
+
+                    <div class="selected-summary">
+                        <span>SELECTED</span>
+                        <p id="selected-interests">
+                            Choose at least one interest above.
+                        </p>
+                    </div>
+
+                </section>
+
+                <section class="form-card">
+
+                    <div class="form-card-heading">
+                        <span>04</span>
+
+                        <div>
+                            <h2>Where do you want to go?</h2>
+                            <p>
+                                Choose the career direction that currently fits you best.
+                            </p>
+                        </div>
+                    </div>
+
+                    <label class="selection-label">
+                        Career Goal
+                    </label>
+
+                    <div class="career-grid"
+                         id="career-options">
+
+                        <button type="button"
+                                class="career-card"
+                                data-value="Software Developer">
+                            <span class="career-icon">💻</span>
+                            <span>
+                                <strong>Software Developer</strong>
+                                <small>Build software and applications</small>
+                            </span>
+                        </button>
+
+                        <button type="button"
+                                class="career-card"
+                                data-value="Web Developer">
+                            <span class="career-icon">🌐</span>
+                            <span>
+                                <strong>Web Developer</strong>
+                                <small>Build modern websites and web apps</small>
+                            </span>
+                        </button>
+
+                        <button type="button"
+                                class="career-card"
+                                data-value="Data Analyst">
+                            <span class="career-icon">📊</span>
+                            <span>
+                                <strong>Data Analyst</strong>
+                                <small>Turn data into useful insights</small>
+                            </span>
+                        </button>
+
+                        <button type="button"
+                                class="career-card"
+                                data-value="Data Scientist">
+                            <span class="career-icon">◫</span>
+                            <span>
+                                <strong>Data Scientist</strong>
+                                <small>Work with data, models and predictions</small>
+                            </span>
+                        </button>
+
+                        <button type="button"
+                                class="career-card"
+                                data-value="AI/ML Engineer">
+                            <span class="career-icon">✦</span>
+                            <span>
+                                <strong>AI/ML Engineer</strong>
+                                <small>Build intelligent systems and models</small>
+                            </span>
+                        </button>
+
+                        <button type="button"
+                                class="career-card"
+                                data-value="Cybersecurity Analyst">
+                            <span class="career-icon">🔐</span>
+                            <span>
+                                <strong>Cybersecurity Analyst</strong>
+                                <small>Protect systems, networks and data</small>
+                            </span>
+                        </button>
+
+                        <button type="button"
+                                class="career-card"
+                                data-value="Cloud Engineer">
+                            <span class="career-icon">☁</span>
+                            <span>
+                                <strong>Cloud Engineer</strong>
+                                <small>Work with cloud infrastructure</small>
+                            </span>
+                        </button>
+
+                        <button type="button"
+                                class="career-card"
+                                data-value="Mobile App Developer">
+                            <span class="career-icon">📱</span>
+                            <span>
+                                <strong>App Developer</strong>
+                                <small>Create mobile applications</small>
+                            </span>
+                        </button>
+
+                        <button type="button"
+                                class="career-card"
+                                data-value="UI/UX Designer">
+                            <span class="career-icon">◈</span>
+                            <span>
+                                <strong>UI/UX Designer</strong>
+                                <small>Design useful digital experiences</small>
+                            </span>
+                        </button>
+
+                        <button type="button"
+                                class="career-card"
+                                data-value="DevOps Engineer">
+                            <span class="career-icon">↻</span>
+                            <span>
+                                <strong>DevOps Engineer</strong>
+                                <small>Automate development and deployment</small>
+                            </span>
+                        </button>
+
+                        <button type="button"
+                                class="career-card"
+                                data-value="Explore Career Options">
+                            <span class="career-icon">⌕</span>
+                            <span>
+                                <strong>I'm still exploring</strong>
+                                <small>Recommend opportunities across my interests</small>
+                            </span>
+                        </button>
+
+                    </div>
+
+                    <input
+                        type="hidden"
+                        id="career_goal"
+                        name="career_goal"
+                        value="{{ profile['career_goal'] if profile else '' }}"
+                        required>
+
+                </section>
+
+                <div class="form-actions">
+
+                    <a href="{{ url_for('dashboard') }}"
+                       class="cancel-button">
+                        Cancel
+                    </a>
+
+                    <button type="submit"
+                            class="save-button">
+                        Save My Profile →
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </main>
+
+</div>
+
+<script src="{{ url_for('static', filename='js/profile.js') }}"></script>
+
+</body>
+</html>

@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard | INTERN</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/admin.css') }}"
+    >
+</head>
+
+<body>
+
+    <div class="app-shell">
+
+        <aside class="sidebar">
+
+            <a href="{{ url_for('admin_dashboard') }}" class="brand">
+
+                <div class="brand-mark"></div>
+
+                <div class="brand-text">
+                    <div class="brand-name">INTERN</div>
+                    <div class="brand-subtitle">SMART INTERNSHIP DISCOVERY</div>
+                </div>
+
+            </a>
+
+            <nav class="sidebar-nav">
+
+                <div class="nav-label">
+                    ADMIN PORTAL
+                </div>
+
+                <a
+                    href="{{ url_for('admin_dashboard') }}"
+                    class="nav-item active"
+                >
+
+                    <span class="nav-icon">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path d="M4 13h6V4H4v9Z" stroke="currentColor" stroke-width="1.8"/>
+                            <path d="M14 20h6v-9h-6v9Z" stroke="currentColor" stroke-width="1.8"/>
+                            <path d="M14 8h6V4h-6v4Z" stroke="currentColor" stroke-width="1.8"/>
+                            <path d="M4 20h6v-3H4v3Z" stroke="currentColor" stroke-width="1.8"/>
+                        </svg>
+                    </span>
+
+                    <span>Dashboard</span>
+
+                </a>
+
+                <a
+                    href="{{ url_for('admin_internships') }}"
+                    class="nav-item"
+                >
+
+                    <span class="nav-icon">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path d="M4 7.5h16v11H4v-11Z" stroke="currentColor" stroke-width="1.8"/>
+                            <path d="M9 7.5V5.8A1.8 1.8 0 0 1 10.8 4h2.4A1.8 1.8 0 0 1 15 5.8v1.7" stroke="currentColor" stroke-width="1.8"/>
+                            <path d="M4 12h16" stroke="currentColor" stroke-width="1.8"/>
+                            <path d="M10 12v2h4v-2" stroke="currentColor" stroke-width="1.8"/>
+                        </svg>
+                    </span>
+
+                    <span>Internships</span>
+
+                </a>
+
+                <a
+                    href="{{ url_for('admin_add_internship') }}"
+                    class="nav-item"
+                >
+
+                    <span class="nav-icon">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path d="M12 5v14" stroke="currentColor" stroke-width="1.8"/>
+                            <path d="M5 12h14" stroke="currentColor" stroke-width="1.8"/>
+                            <rect x="3.5" y="3.5" width="17" height="17" rx="4" stroke="currentColor" stroke-width="1.5"/>
+                        </svg>
+                    </span>
+
+                    <span>Add Internship</span>
+
+                </a>
+
+                <a
+                    href="{{ url_for('admin_students') }}"
+                    class="nav-item"
+                >
+
+                    <span class="nav-icon">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path d="M8 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" stroke="currentColor" stroke-width="1.7"/>
+                            <path d="M16.5 10a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" stroke="currentColor" stroke-width="1.7"/>
+                            <path d="M3 19c.3-3.3 2.2-5 5-5s4.7 1.7 5 5" stroke="currentColor" stroke-width="1.7"/>
+                            <path d="M14 14c3.8-.5 6.3 1.1 7 4" stroke="currentColor" stroke-width="1.7"/>
+                        </svg>
+                    </span>
+
+                    <span>Students</span>
+
+                </a>
+
+                <a
+                    href="{{ url_for('admin_reports') }}"
+                    class="nav-item"
+                >
+
+                    <span class="nav-icon">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path d="M5 19V9" stroke="currentColor" stroke-width="1.8"/>
+                            <path d="M12 19V5" stroke="currentColor" stroke-width="1.8"/>
+                            <path d="M19 19v-7" stroke="currentColor" stroke-width="1.8"/>
+                            <path d="M3 19h18" stroke="currentColor" stroke-width="1.8"/>
+                        </svg>
+                    </span>
+
+                    <span>Reports</span>
+
+                </a>
+
+                <div class="nav-label nav-label-secondary">
+                    ACCOUNT
+                </div>
+
+                <a
+                    href="{{ url_for('admin_logout') }}"
+                    class="nav-item logout-item"
+                >
+
+                    <span class="nav-icon">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path d="M10 5H5v14h5" stroke="currentColor" stroke-width="1.8"/>
+                            <path d="M14 8l4 4-4 4" stroke="currentColor" stroke-width="1.8"/>
+                            <path d="M18 12H9" stroke="currentColor" stroke-width="1.8"/>
+                        </svg>
+                    </span>
+
+                    <span>Logout</span>
+
+                </a>
+
+            </nav>
+
+            <div class="sidebar-footer">
+
+                <div class="admin-mini-avatar">
+                    {{ admin["full_name"][0]|upper }}
+                </div>
+
+                <div class="admin-mini-copy">
+
+                    <strong>
+                        {{ admin["full_name"] }}
+                    </strong>
+
+                    <span>
+                        Administrator
+                    </span>
+
+                </div>
+
+            </div>
+
+        </aside>
+
+        <main class="main-area">
+
+            <header class="topbar">
+
+                <div class="topbar-title">
+                    Admin Portal
+                </div>
+
+                <div class="topbar-admin">
+
+                    <div class="topbar-admin-copy">
+
+                        <strong>
+                            {{ admin["full_name"] }}
+                        </strong>
+
+                        <span>
+                            {{ admin["email"] }}
+                        </span>
+
+                    </div>
+
+                    <div class="topbar-avatar">
+                        {{ admin["full_name"][0]|upper }}
+                    </div>
+
+                </div>
+
+            </header>
+
+            <div class="page-content">
+
+                {% with messages = get_flashed_messages(with_categories=true) %}
+
+                    {% if messages %}
+
+                        <div class="dashboard-flash-area">
+
+                            {% for category, message in messages %}
+
+                                <div class="flash-message {{ category }}">
+                                    {{ message }}
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+                    {% endif %}
+
+                {% endwith %}
+
+                <section class="admin-management-header">
+
+                    <div>
+
+                        <span class="section-eyebrow">
+                            ADMINISTRATION OVERVIEW
+                        </span>
+
+                        <h1>
+                            Welcome back, {{ admin["full_name"].split()[0] }}.
+                        </h1>
+
+                        <p>
+                            Manage internship opportunities, monitor student
+                            activity and maintain the INTERN platform from one
+                            central workspace.
+                        </p>
+
+                    </div>
+
+                    <a
+                        href="{{ url_for('admin_add_internship') }}"
+                        class="admin-primary-button"
+                    >
+                        <span class="admin-button-plus">+</span>
+                        Add Internship
+                    </a>
+
+                </section>
+
+                <section class="admin-report-summary">
+
+                    <article class="admin-report-card">
+
+                        <div class="admin-report-icon">
+                            IN
+                        </div>
+
+                        <div>
+
+                            <span>
+                                TOTAL INTERNSHIPS
+                            </span>
+
+                            <strong>
+                                {{ total_internships }}
+                            </strong>
+
+                            <p>
+                                Opportunities stored in the database
+                            </p>
+
+                        </div>
+
+                    </article>
+
+                    <article class="admin-report-card">
+
+                        <div class="admin-report-icon">
+                            AC
+                        </div>
+
+                        <div>
+
+                            <span>
+                                ACTIVE
+                            </span>
+
+                            <strong>
+                                {{ active_internships }}
+                            </strong>
+
+                            <p>
+                                Available internship opportunities
+                            </p>
+
+                        </div>
+
+                    </article>
+
+                    <article class="admin-report-card">
+
+                        <div class="admin-report-icon">
+                            ST
+                        </div>
+
+                        <div>
+
+                            <span>
+                                STUDENTS
+                            </span>
+
+                            <strong>
+                                {{ total_students }}
+                            </strong>
+
+                            <p>
+                                Registered student accounts
+                            </p>
+
+                        </div>
+
+                    </article>
+
+                    <article class="admin-report-card">
+
+                        <div class="admin-report-icon">
+                            PR
+                        </div>
+
+                        <div>
+
+                            <span>
+                                PROFILES
+                            </span>
+
+                            <strong>
+                                {{ completed_profiles }}
+                            </strong>
+
+                            <p>
+                                Student profiles completed
+                            </p>
+
+                        </div>
+
+                    </article>
+
+                </section>
+
+                <section class="admin-report-grid">
+
+                    <article class="admin-report-panel">
+
+                        <div class="admin-report-panel-header">
+
+                            <div>
+
+                                <span class="section-eyebrow">
+                                    MANAGEMENT
+                                </span>
+
+                                <h2>
+                                    Quick Actions
+                                </h2>
+
+                                <p>
+                                    Access the main administration tools.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                        <div class="admin-mode-report-list">
+
+                            <a
+                                href="{{ url_for('admin_add_internship') }}"
+                                class="admin-mode-report-item"
+                            >
+
+                                <div class="admin-mode-report-label">
+
+                                    <span class="admin-mode-report-icon">
+                                        +
+                                    </span>
+
+                                    <div>
+
+                                        <strong>
+                                            Add Internship
+                                        </strong>
+
+                                        <span>
+                                            Create a new internship opportunity
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                                <strong>→</strong>
+
+                            </a>
+
+                            <a
+                                href="{{ url_for('admin_internships') }}"
+                                class="admin-mode-report-item"
+                            >
+
+                                <div class="admin-mode-report-label">
+
+                                    <span class="admin-mode-report-icon">
+                                        M
+                                    </span>
+
+                                    <div>
+
+                                        <strong>
+                                            Manage Internships
+                                        </strong>
+
+                                        <span>
+                                            Edit, activate or remove listings
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                                <strong>→</strong>
+
+                            </a>
+
+                            <a
+                                href="{{ url_for('admin_students') }}"
+                                class="admin-mode-report-item"
+                            >
+
+                                <div class="admin-mode-report-label">
+
+                                    <span class="admin-mode-report-icon">
+                                        S
+                                    </span>
+
+                                    <div>
+
+                                        <strong>
+                                            View Students
+                                        </strong>
+
+                                        <span>
+                                            Review registered student accounts
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                                <strong>→</strong>
+
+                            </a>
+
+                            <a
+                                href="{{ url_for('admin_reports') }}"
+                                class="admin-mode-report-item"
+                            >
+
+                                <div class="admin-mode-report-label">
+
+                                    <span class="admin-mode-report-icon">
+                                        R
+                                    </span>
+
+                                    <div>
+
+                                        <strong>
+                                            View Reports
+                                        </strong>
+
+                                        <span>
+                                            Review platform statistics
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                                <strong>→</strong>
+
+                            </a>
+
+                        </div>
+
+                    </article>
+
+                    <article class="admin-report-panel">
+
+                        <div class="admin-report-panel-header">
+
+                            <div>
+
+                                <span class="section-eyebrow">
+                                    PLATFORM
+                                </span>
+
+                                <h2>
+                                    Internship Status
+                                </h2>
+
+                                <p>
+                                    Current status of the internship database.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                        <div class="admin-report-detail-row">
+                            <span>Total Internships</span>
+                            <strong>{{ total_internships }}</strong>
+                        </div>
+
+                        <div class="admin-report-detail-row">
+                            <span>Active Internships</span>
+                            <strong>{{ active_internships }}</strong>
+                        </div>
+
+                        <div class="admin-report-detail-row">
+                            <span>Inactive Internships</span>
+                            <strong>{{ inactive_internships }}</strong>
+                        </div>
+
+                        <div class="admin-report-detail-row">
+                            <span>Registered Students</span>
+                            <strong>{{ total_students }}</strong>
+                        </div>
+
+                        <div class="admin-report-detail-row">
+                            <span>Completed Profiles</span>
+                            <strong>{{ completed_profiles }}</strong>
+                        </div>
+
+                    </article>
+
+                </section>
+
+                <section class="admin-internship-panel">
+
+                    <div class="admin-panel-toolbar">
+
+                        <div>
+
+                            <span class="section-eyebrow">
+                                DATABASE
+                            </span>
+
+                            <h2>
+                                Recent Internships
+                            </h2>
+
+                        </div>
+
+                        <a
+                            href="{{ url_for('admin_internships') }}"
+                            class="admin-secondary-button"
+                        >
+                            Manage All →
+                        </a>
+
+                    </div>
+
+                    {% if recent_internships %}
+
+                        <div class="admin-table-wrap">
+
+                            <table class="admin-internship-table">
+
+                                <thead>
+
+                                    <tr>
+                                        <th>COMPANY</th>
+                                        <th>ROLE</th>
+                                        <th>LOCATION</th>
+                                        <th>WORK MODE</th>
+                                        <th>STATUS</th>
+                                        <th>ACTION</th>
+                                    </tr>
+
+                                </thead>
+
+                                <tbody>
+
+                                    {% for internship in recent_internships %}
+
+                                        <tr>
+
+                                            <td>
+
+                                                <div class="admin-company-cell">
+
+                                                    <div class="admin-company-mark">
+                                                        {{ internship["company_name"][0]|upper }}
+                                                    </div>
+
+                                                    <div>
+
+                                                        <strong>
+                                                            {{ internship["company_name"] }}
+                                                        </strong>
+
+                                                        <span>
+                                                            Internship #{{ internship["id"] }}
+                                                        </span>
+
+                                                    </div>
+
+                                                </div>
+
+                                            </td>
+
+                                            <td>
+
+                                                <strong class="admin-role-name">
+                                                    {{ internship["role_title"] }}
+                                                </strong>
+
+                                            </td>
+
+                                            <td>
+                                                {{ internship["location"] }}
+                                            </td>
+
+                                            <td>
+
+                                                <span class="admin-mode-badge">
+                                                    {{ internship["work_mode"] }}
+                                                </span>
+
+                                            </td>
+
+                                            <td>
+
+                                                <span class="table-status {{ internship['status']|lower }}">
+                                                    {{ internship["status"] }}
+                                                </span>
+
+                                            </td>
+
+                                            <td>
+
+                                                <a
+                                                    href="{{ url_for('admin_edit_internship', internship_id=internship['id']) }}"
+                                                    class="admin-table-action"
+                                                >
+                                                    Edit
+                                                </a>
+
+                                            </td>
+
+                                        </tr>
+
+                                    {% endfor %}
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    {% else %}
+
+                        <div class="empty-state">
+
+                            <strong>
+                                No internships yet
+                            </strong>
+
+                            <p>
+                                Add an internship to start building the
+                                opportunity database.
+                            </p>
+
+                            <a
+                                href="{{ url_for('admin_add_internship') }}"
+                                class="admin-primary-button"
+                            >
+                                Add Internship
+                            </a>
+
+                        </div>
+
+                    {% endif %}
+
+                </section>
+
+            </div>
+
+        </main>
+
+    </div>
+
+</body>
+</html>

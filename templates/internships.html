@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Internships | INTERN</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/internships.css') }}">
+</head>
+
+<body>
+
+<div class="app-shell">
+
+    <aside class="sidebar">
+
+        <a href="{{ url_for('dashboard') }}" class="brand">
+            <div class="brand-mark"></div>
+
+            <div class="brand-text">
+                <span class="brand-name">INTERN</span>
+                <span class="brand-subtitle">SMART INTERNSHIP DISCOVERY</span>
+            </div>
+        </a>
+
+        <nav class="sidebar-nav">
+
+            <a href="{{ url_for('dashboard') }}" class="nav-item">
+                <span class="nav-icon">⌂</span>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="{{ url_for('profile') }}" class="nav-item">
+                <span class="nav-icon">◯</span>
+                <span>My Profile</span>
+            </a>
+
+            <a href="{{ url_for('skills') }}" class="nav-item">
+                <span class="nav-icon">◇</span>
+                <span>My Skills</span>
+            </a>
+
+            <a href="{{ url_for('resume') }}" class="nav-item">
+                <span class="nav-icon">▤</span>
+                <span>Resume</span>
+            </a>
+
+            <a href="{{ url_for('internships') }}" class="nav-item active">
+                <span class="nav-icon">⌕</span>
+                <span>Find Internships</span>
+            </a>
+
+            <a href="{{ url_for('recommendations') }}" class="nav-item">
+                <span class="nav-icon">✦</span>
+                <span>Recommendations</span>
+            </a>
+
+            <a href="{{ url_for('skill_gap') }}" class="nav-item">
+                <span class="nav-icon">↗</span>
+                <span>Skill Gap</span>
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <div class="student-mini">
+
+                <div class="student-avatar">
+                    {{ student["full_name"][0]|upper }}
+                </div>
+
+                <div class="student-mini-info">
+                    <strong>{{ student["full_name"] }}</strong>
+                    <span>{{ student["student_id"] }}</span>
+                </div>
+
+            </div>
+
+            <a href="{{ url_for('logout') }}" class="logout-link">
+                <span class="nav-icon">↪</span>
+                <span>Log out</span>
+            </a>
+
+        </div>
+
+    </aside>
+
+    <main class="main-area">
+
+        <header class="topbar">
+
+            <div class="topbar-title">
+                <span class="topbar-label">INTERNSHIP DISCOVERY</span>
+                <strong>Find Internships</strong>
+            </div>
+
+            <div class="topbar-user">
+
+                <div class="topbar-avatar">
+                    {{ student["full_name"][0]|upper }}
+                </div>
+
+                <div class="topbar-user-info">
+                    <strong>{{ student["full_name"] }}</strong>
+                    <span>{{ student["student_id"] }}</span>
+                </div>
+
+            </div>
+
+        </header>
+
+        <div class="page-content">
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-area">
+                        {% for category, message in messages %}
+                            <div class="flash-message {{ category }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            <section class="hero-section">
+
+                <div class="hero-copy">
+
+                    <span class="eyebrow">
+                        EXPLORE OPPORTUNITIES
+                    </span>
+
+                    <h1>Find internships built around your profile.</h1>
+
+                    <p>
+                        Search available opportunities, review eligibility requirements
+                        and see how your saved skills connect with each internship.
+                    </p>
+
+                </div>
+
+                <div class="hero-summary">
+                    <span class="summary-number">{{ internships|length }}</span>
+                    <span class="summary-label">Opportunities shown</span>
+                </div>
+
+            </section>
+
+            <section class="search-panel">
+
+                <form
+                    method="GET"
+                    action="{{ url_for('internships') }}"
+                    class="filter-form"
+                >
+
+                    <div class="search-field">
+
+                        <svg viewBox="0 0 24 24">
+                            <path d="M10 4a6 6 0 1 0 0 12 6 6 0 0 0 0-12Zm-8 6a8 8 0 1 1 14.32 4.906l5.387 5.387-1.414 1.414-5.387-5.387A8 8 0 0 1 2 10Z"/>
+                        </svg>
+
+                        <input
+                            type="text"
+                            name="search"
+                            value="{{ search }}"
+                            placeholder="Search company, role or skill"
+                            autocomplete="off"
+                        >
+
+                    </div>
+
+                    <div class="filter-field">
+
+                        <label for="location">
+                            Location
+                        </label>
+
+                        <select name="location" id="location">
+
+                            <option value="">
+                                All locations
+                            </option>
+
+                            {% for location_option in locations %}
+
+                                <option
+                                    value="{{ location_option }}"
+                                    {% if location == location_option %}selected{% endif %}
+                                >
+                                    {{ location_option }}
+                                </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+                    <div class="filter-field">
+
+                        <label for="work_mode">
+                            Work mode
+                        </label>
+
+                        <select name="work_mode" id="work_mode">
+
+                            <option value="">
+                                All modes
+                            </option>
+
+                            <option
+                                value="Remote"
+                                {% if work_mode == "Remote" %}selected{% endif %}
+                            >
+                                Remote
+                            </option>
+
+                            <option
+                                value="Hybrid"
+                                {% if work_mode == "Hybrid" %}selected{% endif %}
+                            >
+                                Hybrid
+                            </option>
+
+                            <option
+                                value="On-site"
+                                {% if work_mode == "On-site" %}selected{% endif %}
+                            >
+                                On-site
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <button type="submit" class="search-button">
+                        Search internships
+                    </button>
+
+                    {% if search or location or work_mode %}
+                        <a href="{{ url_for('internships') }}" class="clear-button">
+                            Clear
+                        </a>
+                    {% endif %}
+
+                </form>
+
+            </section>
+
+            {% if not profile %}
+
+                <section class="notice-card">
+
+                    <div class="notice-icon">!</div>
+
+                    <div>
+                        <strong>Complete your profile for eligibility checking</strong>
+
+                        <p>
+                            Add your course, branch, current year and academic score
+                            so INTERN can check internship eligibility.
+                        </p>
+                    </div>
+
+                    <a href="{{ url_for('profile') }}">
+                        Complete profile
+                    </a>
+
+                </section>
+
+            {% endif %}
+
+            {% if not student_skills and not resume_skills %}
+
+                <section class="notice-card skills-notice">
+
+                    <div class="notice-icon">+</div>
+
+                    <div>
+                        <strong>Add skills to improve internship comparison</strong>
+
+                        <p>
+                            INTERN uses both your saved skills and skills detected
+                            from your resume when comparing internship requirements.
+                        </p>
+                    </div>
+
+                    <a href="{{ url_for('skills') }}">
+                        Add skills
+                    </a>
+
+                </section>
+
+            {% endif %}
+
+            <section class="results-header">
+
+                <div>
+
+                    <span class="section-label">
+                        AVAILABLE INTERNSHIPS
+                    </span>
+
+                    <h2>
+                        {% if internships|length == 1 %}
+                            1 opportunity found
+                        {% else %}
+                            {{ internships|length }} opportunities found
+                        {% endif %}
+                    </h2>
+
+                </div>
+
+                <span class="results-note">
+                    Active internships only
+                </span>
+
+            </section>
+
+            {% if internships %}
+
+                <div class="internship-grid">
+
+                    {% for internship in internships %}
+
+                        <article class="internship-card">
+
+                            <div class="card-top">
+
+                                <div class="company-mark">
+                                    {{ internship["company_name"][0]|upper }}
+                                </div>
+
+                                <div class="company-info">
+
+                                    <span class="company-name">
+                                        {{ internship["company_name"] }}
+                                    </span>
+
+                                    <h3>
+                                        {{ internship["role_title"] }}
+                                    </h3>
+
+                                </div>
+
+                                <span class="mode-badge {{ internship['work_mode']|lower|replace('-', '') }}">
+                                    {{ internship["work_mode"] }}
+                                </span>
+
+                            </div>
+
+                            <div class="meta-row">
+
+                                <span class="meta-item">
+                                    <span>⌖</span>
+                                    {{ internship["location"] }}
+                                </span>
+
+                                <span class="meta-item">
+                                    <span>◷</span>
+                                    {{ internship["duration"] }}
+                                </span>
+
+                                {% if internship["stipend"] %}
+
+                                    <span class="meta-item">
+                                        <span>₹</span>
+                                        {{ internship["stipend"] }}
+                                    </span>
+
+                                {% endif %}
+
+                            </div>
+
+                            <p class="description">
+                                {{ internship["description"] }}
+                            </p>
+
+                            {% if internship["match_score"] is not none %}
+
+                                <div class="recommendation-box">
+
+                                    <div class="recommendation-score-area">
+
+                                        <div class="match-score-circle">
+
+                                            <span class="match-score-number">
+                                                {{ internship["match_score"] }}%
+                                            </span>
+
+                                            <span class="match-score-label">
+                                                MATCH
+                                            </span>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="recommendation-content">
+
+                                        <div class="recommendation-heading">
+
+                                            <div>
+
+                                                <span class="recommendation-eyebrow">
+                                                    INTERN RECOMMENDATION
+                                                </span>
+
+                                                <strong>
+                                                    {% if internship["match_score"] >= 80 %}
+                                                        Strong match
+                                                    {% elif internship["match_score"] >= 60 %}
+                                                        Good match
+                                                    {% elif internship["match_score"] >= 40 %}
+                                                        Partial match
+                                                    {% else %}
+                                                        Developing match
+                                                    {% endif %}
+                                                </strong>
+
+                                            </div>
+
+                                            {% if internship["skill_match_score"] is not none %}
+
+                                                <span class="skill-match-pill">
+                                                    {{ internship["skill_match_score"] }}% skills
+                                                </span>
+
+                                            {% endif %}
+
+                                        </div>
+
+                                        <p>
+                                            {{ internship["match_explanation"] }}
+                                        </p>
+
+                                        <progress
+                                            class="match-progress-bar"
+                                            value="{{ internship['match_score'] }}"
+                                            max="100"
+                                        ></progress>
+
+                                    </div>
+
+                                </div>
+
+                            {% else %}
+
+                                <div class="recommendation-box recommendation-pending">
+
+                                    <div class="recommendation-pending-icon">
+                                        ✦
+                                    </div>
+
+                                    <div class="recommendation-content">
+
+                                        <span class="recommendation-eyebrow">
+                                            INTERN RECOMMENDATION
+                                        </span>
+
+                                        <strong>
+                                            Match score not available yet
+                                        </strong>
+
+                                        <p>
+                                            {{ internship["match_explanation"] }}
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+                            {% endif %}
+
+                            <div class="skills-section">
+
+                                <span class="card-label">
+                                    REQUIRED SKILLS
+                                </span>
+
+                                <div class="skill-tags">
+
+                                    {% for required_skill in internship["required_skills_list"] %}
+
+                                        <span class="skill-tag">
+                                            {{ required_skill }}
+                                        </span>
+
+                                    {% endfor %}
+
+                                </div>
+
+                            </div>
+
+                            {% if internship["matched_skills"] %}
+
+                                <div class="skills-section">
+
+                                    <span class="card-label">
+                                        YOUR MATCHING SKILLS
+                                    </span>
+
+                                    <div class="skill-tags">
+
+                                        {% for matched_skill in internship["matched_skills"] %}
+
+                                            <span class="skill-tag matched">
+                                                ✓ {{ matched_skill }}
+                                            </span>
+
+                                        {% endfor %}
+
+                                    </div>
+
+                                </div>
+
+                            {% endif %}
+
+                            {% if internship["missing_skills"] %}
+
+                                <div class="skills-section">
+
+                                    <span class="card-label">
+                                        SKILLS TO DEVELOP
+                                    </span>
+
+                                    <div class="skill-tags">
+
+                                        {% for missing_skill in internship["missing_skills"] %}
+
+                                            <span class="skill-tag missing">
+                                                {{ missing_skill }}
+                                            </span>
+
+                                        {% endfor %}
+
+                                    </div>
+
+                                </div>
+
+                            {% endif %}
+
+                            <div class="eligibility-box">
+
+                                {% if not profile %}
+
+                                    <div class="eligibility-status neutral">
+
+                                        <span class="status-icon">?</span>
+
+                                        <div>
+                                            <strong>Eligibility not checked</strong>
+                                            <span>Complete your profile first.</span>
+                                        </div>
+
+                                    </div>
+
+                                {% elif internship["eligible"] %}
+
+                                    <div class="eligibility-status eligible">
+
+                                        <span class="status-icon">✓</span>
+
+                                        <div>
+
+                                            <strong>
+                                                Profile eligible
+                                            </strong>
+
+                                            <span>
+                                                Your saved academic profile meets the listed eligibility requirements.
+                                            </span>
+
+                                        </div>
+
+                                    </div>
+
+                                {% else %}
+
+                                    <div class="eligibility-status not-eligible">
+
+                                        <span class="status-icon">!</span>
+
+                                        <div>
+
+                                            <strong>
+                                                Eligibility requirements not fully met
+                                            </strong>
+
+                                            {% if internship["eligibility_reasons"] %}
+
+                                                <span>
+                                                    {{ internship["eligibility_reasons"]|join(" • ") }}
+                                                </span>
+
+                                            {% else %}
+
+                                                <span>
+                                                    Review the internship eligibility requirements.
+                                                </span>
+
+                                            {% endif %}
+
+                                        </div>
+
+                                    </div>
+
+                                {% endif %}
+
+                            </div>
+
+                            <div class="card-details">
+
+                                <div class="detail-item">
+
+                                    <span>
+                                        ELIGIBLE COURSES
+                                    </span>
+
+                                    <strong>
+                                        {{ internship["eligible_courses"] or "Not specified" }}
+                                    </strong>
+
+                                </div>
+
+                                <div class="detail-item">
+
+                                    <span>
+                                        ELIGIBLE BRANCHES
+                                    </span>
+
+                                    <strong>
+                                        {{ internship["eligible_branches"] or "Not specified" }}
+                                    </strong>
+
+                                </div>
+
+                                <div class="detail-item">
+
+                                    <span>
+                                        ELIGIBLE YEARS
+                                    </span>
+
+                                    <strong>
+                                        {{ internship["eligible_years"] or "Not specified" }}
+                                    </strong>
+
+                                </div>
+
+                                <div class="detail-item">
+
+                                    <span>
+                                        MINIMUM SCORE
+                                    </span>
+
+                                    <strong>
+
+                                        {% if internship["minimum_score"] is not none %}
+
+                                            {{ internship["minimum_score"]|int if internship["minimum_score"] == internship["minimum_score"]|int else internship["minimum_score"] }}
+
+                                            {% if internship["score_type"] == "Percentage" %}
+                                                %
+                                            {% else %}
+                                                {{ internship["score_type"] or "" }}
+                                            {% endif %}
+
+                                        {% else %}
+
+                                            Not specified
+
+                                        {% endif %}
+
+                                    </strong>
+
+                                </div>
+
+                                <div class="detail-item">
+
+                                    <span>
+                                        OPENINGS
+                                    </span>
+
+                                    <strong>
+                                        {{ internship["openings"] }}
+                                    </strong>
+
+                                </div>
+
+                                <div class="detail-item">
+
+                                    <span>
+                                        DEADLINE
+                                    </span>
+
+                                    <strong>
+                                        {{ internship["application_deadline"] or "Not specified" }}
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+                            <div class="card-footer">
+
+                                <span class="active-status">
+                                    <span></span>
+                                    Active
+                                </span>
+
+                                {% if internship["application_link"] %}
+
+                                    <a
+                                        href="{{ internship['application_link'] }}"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        class="apply-button"
+                                    >
+                                        Apply now ↗
+                                    </a>
+
+                                {% else %}
+
+                                    <span class="demo-label">
+                                        Project demo listing
+                                    </span>
+
+                                {% endif %}
+
+                            </div>
+
+                        </article>
+
+                    {% endfor %}
+
+                </div>
+
+            {% else %}
+
+                <section class="empty-state">
+
+                    <div class="empty-icon">
+                        ⌕
+                    </div>
+
+                    <h2>
+                        No internships found
+                    </h2>
+
+                    <p>
+                        Try changing your search, location or work-mode filters.
+                    </p>
+
+                    <a href="{{ url_for('internships') }}">
+                        View all internships
+                    </a>
+
+                </section>
+
+            {% endif %}
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html>

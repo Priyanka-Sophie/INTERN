@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login | INTERN</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/auth.css') }}"
+    >
+</head>
+
+<body class="auth-body">
+
+<div class="auth-layout">
+
+    <section class="auth-brand-panel">
+
+        <a href="{{ url_for('home') }}" class="logo logo-light">
+
+            <span class="logo-mark logo-mark-light"></span>
+
+            <span class="logo-text">
+                <strong>INTERN</strong>
+                <small>SMART INTERNSHIP DISCOVERY</small>
+            </span>
+
+        </a>
+
+        <div class="auth-brand-content">
+
+            <span class="auth-kicker">
+                STUDENT INTERNSHIP RECOMMENDATION SYSTEM
+            </span>
+
+            <h1>
+                Your career journey
+                <span>starts with the right match.</span>
+            </h1>
+
+            <p>
+                Discover internships suited to your skills, qualifications
+                and interests. Understand your strengths and identify the
+                skills you can improve.
+            </p>
+
+            <div class="auth-benefits">
+
+                <div>
+                    <span>✓</span>
+                    Personalized internship recommendations
+                </div>
+
+                <div>
+                    <span>✓</span>
+                    Resume-based skill analysis
+                </div>
+
+                <div>
+                    <span>✓</span>
+                    Match scores and skill-gap insights
+                </div>
+
+            </div>
+
+        </div>
+
+        <p class="panel-footer">
+            INTERN · Student Internship Recommendation System
+        </p>
+
+    </section>
+
+    <section class="auth-form-panel">
+
+        <div class="auth-form-container">
+
+            <a href="{{ url_for('home') }}" class="back-link">
+                ← Back to home
+            </a>
+
+            <div class="auth-heading">
+
+                <span class="eyebrow">
+                    STUDENT PORTAL
+                </span>
+
+                <h2>
+                    Welcome back.
+                </h2>
+
+                <p>
+                    Enter your account details to continue.
+                </p>
+
+            </div>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+
+                {% if messages %}
+
+                    <div class="flash-container">
+
+                        {% for category, message in messages %}
+
+                            <div class="flash-message {{ category }}">
+                                {{ message }}
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                {% endif %}
+
+            {% endwith %}
+
+            <form
+                method="POST"
+                action="{{ url_for('login') }}"
+                class="auth-form"
+                id="login-form"
+                novalidate
+            >
+
+                <div class="form-group">
+
+                    <label for="identifier">
+                        Student ID or Email
+                    </label>
+
+                    <input
+                        type="text"
+                        id="identifier"
+                        name="identifier"
+                        placeholder="Enter your Student ID or email"
+                        value="{{ identifier|default('') }}"
+                        maxlength="120"
+                        autocomplete="username"
+                        required
+                    >
+
+                    <small
+                        class="field-message"
+                        id="identifier-message"
+                    ></small>
+
+                </div>
+
+                <div class="form-group">
+
+                    <div class="label-row">
+
+                        <label for="login-password">
+                            Password
+                        </label>
+
+                        <a href="#" class="text-link">
+                            Forgot password?
+                        </a>
+
+                    </div>
+
+                    <div class="password-wrapper">
+
+                        <input
+                            type="password"
+                            id="login-password"
+                            name="password"
+                            placeholder="Enter your password"
+                            maxlength="64"
+                            autocomplete="current-password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            data-target="login-password"
+                        >
+                            Show
+                        </button>
+
+                    </div>
+
+                    <small
+                        class="caps-lock-message"
+                        id="login-password-caps"
+                    >
+                        Caps Lock is ON
+                    </small>
+
+                    <small
+                        class="field-message"
+                        id="login-password-message"
+                    ></small>
+
+                </div>
+
+                <label class="checkbox-row">
+
+                    <input
+                        type="checkbox"
+                        name="remember"
+                    >
+
+                    <span>
+                        Remember me on this device
+                    </span>
+
+                </label>
+
+                <button
+                    type="submit"
+                    class="btn btn-primary auth-submit"
+                >
+                    Log in
+                </button>
+
+            </form>
+
+            <div class="auth-switch">
+
+                <span>
+                    Don't have an account?
+                </span>
+
+                <a href="{{ url_for('register') }}">
+                    Create an account
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+
+</body>
+
+</html>

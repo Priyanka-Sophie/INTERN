@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Skill Gap Analysis | INTERN</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/skill_gap.css') }}"
+    >
+</head>
+
+<body>
+
+<div class="app-shell">
+
+    <aside class="sidebar">
+
+        <a href="{{ url_for('dashboard') }}" class="brand">
+
+            <div class="brand-mark"></div>
+
+            <div class="brand-text">
+                <span class="brand-name">INTERN</span>
+                <span class="brand-subtitle">SMART INTERNSHIP DISCOVERY</span>
+            </div>
+
+        </a>
+
+        <div class="sidebar-label">
+            STUDENT PORTAL
+        </div>
+
+        <nav class="sidebar-nav">
+
+            <a href="{{ url_for('dashboard') }}" class="nav-item">
+                <span class="nav-icon">⌂</span>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="{{ url_for('profile') }}" class="nav-item">
+                <span class="nav-icon">◯</span>
+                <span>My Profile</span>
+            </a>
+
+            <a href="{{ url_for('skills') }}" class="nav-item">
+                <span class="nav-icon">◇</span>
+                <span>My Skills</span>
+            </a>
+
+            <a href="{{ url_for('resume') }}" class="nav-item">
+                <span class="nav-icon">▤</span>
+                <span>Resume</span>
+            </a>
+
+            <a href="{{ url_for('internships') }}" class="nav-item">
+                <span class="nav-icon">⌕</span>
+                <span>Find Internships</span>
+            </a>
+
+            <a href="{{ url_for('recommendations') }}" class="nav-item">
+                <span class="nav-icon">✦</span>
+                <span>Recommendations</span>
+            </a>
+
+            <a href="{{ url_for('skill_gap') }}" class="nav-item active">
+                <span class="nav-icon">↗</span>
+                <span>Skill Gap</span>
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <div class="student-mini">
+
+                <div class="student-avatar">
+                    {{ student["full_name"][0]|upper }}
+                </div>
+
+                <div class="student-mini-info">
+                    <strong>{{ student["full_name"] }}</strong>
+                    <span>{{ student["student_id"] }}</span>
+                </div>
+
+            </div>
+
+            <a href="{{ url_for('logout') }}" class="logout-link">
+                <span class="nav-icon">↪</span>
+                <span>Log out</span>
+            </a>
+
+        </div>
+
+    </aside>
+
+    <main class="main-area">
+
+        <header class="topbar">
+
+            <div class="topbar-title">
+                <span>CAREER READINESS</span>
+                <strong>Skill Gap Analysis</strong>
+            </div>
+
+            <div class="topbar-user">
+
+                <div class="topbar-avatar">
+                    {{ student["full_name"][0]|upper }}
+                </div>
+
+                <div class="topbar-user-info">
+                    <strong>{{ student["full_name"] }}</strong>
+                    <span>{{ student["student_id"] }}</span>
+                </div>
+
+            </div>
+
+        </header>
+
+        <div class="page-content">
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+
+                {% if messages %}
+
+                    <div class="flash-area">
+
+                        {% for category, message in messages %}
+
+                            <div class="flash-message {{ category }}">
+                                {{ message }}
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                {% endif %}
+
+            {% endwith %}
+
+            <section class="hero-section">
+
+                <div class="hero-copy">
+
+                    <span class="eyebrow">
+                        SKILL GAP INTELLIGENCE
+                    </span>
+
+                    <h1>Know what to learn next.</h1>
+
+                    <p>
+                        INTERN compares your saved and resume-detected skills
+                        with active internship requirements to identify the
+                        skills you already have and the skills that can improve
+                        your internship readiness.
+                    </p>
+
+                </div>
+
+                {% if analysis_ready %}
+
+                    <div class="readiness-card">
+
+                        <div class="readiness-score">
+
+                            {% if best_target and best_target["skill_match_score"] is not none %}
+                                {{ best_target["skill_match_score"] }}%
+                            {% else %}
+                                —
+                            {% endif %}
+
+                        </div>
+
+                        <div class="readiness-copy">
+
+                            <span>BEST ELIGIBLE SKILL COVERAGE</span>
+
+                            <strong>
+                                {% if best_target %}
+                                    {% if best_target["skill_match_score"] >= 80 %}
+                                        Strong skill coverage
+                                    {% elif best_target["skill_match_score"] >= 60 %}
+                                        Good skill coverage
+                                    {% elif best_target["skill_match_score"] >= 40 %}
+                                        Developing skill coverage
+                                    {% else %}
+                                        More skills to build
+                                    {% endif %}
+                                {% else %}
+                                    No eligible target available
+                                {% endif %}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                {% else %}
+
+                    <div class="readiness-card pending">
+
+                        <div class="readiness-score">
+                            —
+                        </div>
+
+                        <div class="readiness-copy">
+                            <span>BEST ELIGIBLE SKILL COVERAGE</span>
+                            <strong>Profile setup required</strong>
+                        </div>
+
+                    </div>
+
+                {% endif %}
+
+            </section>
+
+            {% if analysis_ready %}
+
+                <section class="summary-grid">
+
+                    <article class="summary-card">
+
+                        <div class="summary-icon">
+                            ✓
+                        </div>
+
+                        <div>
+                            <span>YOUR SKILLS</span>
+                            <strong>{{ combined_skills|length }}</strong>
+                            <p>Saved and resume-detected skills used for analysis.</p>
+                        </div>
+
+                    </article>
+
+                    <article class="summary-card">
+
+                        <div class="summary-icon">
+                            ◇
+                        </div>
+
+                        <div>
+                            <span>SKILLS TO DEVELOP</span>
+                            <strong>{{ total_missing_skills }}</strong>
+                            <p>Unique missing skills across eligible internships.</p>
+                        </div>
+
+                    </article>
+
+                    <article class="summary-card">
+
+                        <div class="summary-icon">
+                            ↗
+                        </div>
+
+                        <div>
+                            <span>TOP PRIORITIES</span>
+                            <strong>{{ priority_skills|length }}</strong>
+                            <p>Skills ranked by frequency across eligible internships.</p>
+                        </div>
+
+                    </article>
+
+                    <article class="summary-card">
+
+                        <div class="summary-icon">
+                            ✦
+                        </div>
+
+                        <div>
+                            <span>INTERNSHIPS ANALYZED</span>
+                            <strong>{{ internship_gaps|length }}</strong>
+                            <p>Active opportunities compared with your real skills.</p>
+                        </div>
+
+                    </article>
+
+                </section>
+
+                <section class="skills-overview">
+
+                    <article class="overview-card current-skills-card">
+
+                        <div class="section-heading">
+
+                            <div>
+                                <span>YOUR FOUNDATION</span>
+                                <h2>Skills you already have</h2>
+                            </div>
+
+                            <span class="section-count">
+                                {{ combined_skills|length }}
+                            </span>
+
+                        </div>
+
+                        {% if combined_skills %}
+
+                            <div class="skill-tags">
+
+                                {% for skill in combined_skills %}
+
+                                    <span class="skill-tag owned">
+                                        ✓ {{ skill }}
+                                    </span>
+
+                                {% endfor %}
+
+                            </div>
+
+                        {% else %}
+
+                            <div class="mini-empty">
+                                No skills available yet.
+                            </div>
+
+                        {% endif %}
+
+                    </article>
+
+                    <article class="overview-card gap-overview-card">
+
+                        <div class="section-heading">
+
+                            <div>
+                                <span>MARKET GAP</span>
+                                <h2>Skills appearing in your gaps</h2>
+                            </div>
+
+                            <span class="section-count">
+                                {{ total_missing_skills }}
+                            </span>
+
+                        </div>
+
+                        {% if priority_skills %}
+
+                            <div class="skill-tags">
+
+                                {% for item in priority_skills %}
+
+                                    <span class="skill-tag missing">
+                                        {{ item["skill"] }}
+                                    </span>
+
+                                {% endfor %}
+
+                            </div>
+
+                        {% else %}
+
+                            <div class="success-state">
+
+                                <span>✓</span>
+
+                                <div>
+
+                                    <strong>
+                                        No eligible internship skill gaps detected.
+                                    </strong>
+
+                                    <p>
+                                        Your current saved and resume-detected skills
+                                        cover the listed skill requirements of the
+                                        eligible internships analyzed.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        {% endif %}
+
+                    </article>
+
+                </section>
+
+                <section class="priority-section">
+
+                    <div class="section-title-row">
+
+                        <div>
+
+                            <span class="eyebrow">
+                                LEARNING PRIORITIES
+                            </span>
+
+                            <h2>Skills worth focusing on next</h2>
+
+                            <p>
+                                Priority is based on how often a missing skill
+                                appears across internships for which your current
+                                academic profile is eligible.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    {% if priority_skills %}
+
+                        <div class="priority-grid">
+
+                            {% for item in priority_skills %}
+
+                                <article class="priority-card">
+
+                                    <div class="priority-rank">
+                                        {{ loop.index }}
+                                    </div>
+
+                                    <div class="priority-content">
+
+                                        <div class="priority-heading">
+
+                                            <div>
+
+                                                <span>
+                                                    LEARNING PRIORITY
+                                                </span>
+
+                                                <h3>
+                                                    {{ item["skill"] }}
+                                                </h3>
+
+                                            </div>
+
+                                            <div class="demand-badge">
+                                                {{ item["count"] }}
+                                                internship{% if item["count"] != 1 %}s{% endif %}
+                                            </div>
+
+                                        </div>
+
+                                        <p>
+                                            This skill is missing from your current
+                                            profile and appears in
+                                            {{ item["count"] }}
+                                            eligible active internship{% if item["count"] != 1 %}s{% endif %}.
+                                        </p>
+
+                                        <div class="priority-meter">
+
+                                            <div class="priority-meter-track">
+
+                                                <progress
+                                                    class="priority-progress"
+                                                    value="{{ item['count'] }}"
+                                                    max="{{ priority_skills[0]['count'] }}"
+                                                ></progress>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </article>
+
+                            {% endfor %}
+
+                        </div>
+
+                    {% else %}
+
+                        <div class="empty-priority">
+
+                            <div class="empty-priority-icon">
+                                ✓
+                            </div>
+
+                            <div>
+
+                                <h3>
+                                    No additional priority skills detected.
+                                </h3>
+
+                                <p>
+                                    INTERN did not find missing skills across
+                                    the eligible active internships currently
+                                    analyzed for your profile.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    {% endif %}
+
+                </section>
+
+                <section class="internship-gap-section">
+
+                    <div class="section-title-row">
+
+                        <div>
+
+                            <span class="eyebrow">
+                                INTERNSHIP-BY-INTERNSHIP
+                            </span>
+
+                            <h2>See exactly where each gap comes from</h2>
+
+                            <p>
+                                Review required, matched and missing skills for
+                                every active internship using your current
+                                stored profile information.
+                            </p>
+
+                        </div>
+
+                        <a
+                            href="{{ url_for('internships') }}"
+                            class="secondary-action"
+                        >
+                            Browse Internships →
+                        </a>
+
+                    </div>
+
+                    {% if internship_gaps %}
+
+                        <div class="gap-list">
+
+                            {% for internship in internship_gaps %}
+
+                                <article class="gap-card">
+
+                                    <div class="gap-card-header">
+
+                                        <div class="company-area">
+
+                                            <div class="company-mark">
+                                                {{ internship["company_name"][0]|upper }}
+                                            </div>
+
+                                            <div>
+
+                                                <span class="company-name">
+                                                    {{ internship["company_name"] }}
+                                                </span>
+
+                                                <h3>
+                                                    {{ internship["role_title"] }}
+                                                </h3>
+
+                                            </div>
+
+                                        </div>
+
+                                        <div class="coverage-area">
+
+                                            <strong>
+                                                {% if internship["skill_match_score"] is not none %}
+                                                    {{ internship["skill_match_score"] }}%
+                                                {% else %}
+                                                    —
+                                                {% endif %}
+                                            </strong>
+
+                                            <span>
+                                                SKILL COVERAGE
+                                            </span>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="gap-meta">
+
+                                        <span>
+                                            ⌖ {{ internship["location"] }}
+                                        </span>
+
+                                        <span>
+                                            ◷ {{ internship["duration"] }}
+                                        </span>
+
+                                        <span>
+                                            {{ internship["work_mode"] }}
+                                        </span>
+
+                                        {% if internship["eligible"] %}
+
+                                            <span class="eligibility-pill eligible">
+                                                ✓ Eligible
+                                            </span>
+
+                                        {% else %}
+
+                                            <span class="eligibility-pill review">
+                                                ! Eligibility review
+                                            </span>
+
+                                        {% endif %}
+
+                                    </div>
+
+                                    <div class="coverage-progress">
+
+                                        <progress
+                                            class="coverage-progress-bar"
+                                            value="{{ internship['skill_match_score'] if internship['skill_match_score'] is not none else 0 }}"
+                                            max="100"
+                                        ></progress>
+
+                                    </div>
+
+                                    <div class="gap-skill-grid">
+
+                                        <div class="gap-skill-column">
+
+                                            <div class="skill-column-heading">
+
+                                                <span>MATCHED SKILLS</span>
+
+                                                <strong>
+                                                    {{ internship["matched_skills"]|length }}
+                                                </strong>
+
+                                            </div>
+
+                                            {% if internship["matched_skills"] %}
+
+                                                <div class="skill-tags">
+
+                                                    {% for skill in internship["matched_skills"] %}
+
+                                                        <span class="skill-tag owned">
+                                                            ✓ {{ skill }}
+                                                        </span>
+
+                                                    {% endfor %}
+
+                                                </div>
+
+                                            {% else %}
+
+                                                <p class="column-empty">
+                                                    No required skills matched yet.
+                                                </p>
+
+                                            {% endif %}
+
+                                        </div>
+
+                                        <div class="gap-skill-column">
+
+                                            <div class="skill-column-heading">
+
+                                                <span>MISSING SKILLS</span>
+
+                                                <strong>
+                                                    {{ internship["missing_skills"]|length }}
+                                                </strong>
+
+                                            </div>
+
+                                            {% if internship["missing_skills"] %}
+
+                                                <div class="skill-tags">
+
+                                                    {% for skill in internship["missing_skills"] %}
+
+                                                        <span class="skill-tag missing">
+                                                            {{ skill }}
+                                                        </span>
+
+                                                    {% endfor %}
+
+                                                </div>
+
+                                            {% else %}
+
+                                                <div class="complete-message">
+                                                    ✓ All listed skills matched
+                                                </div>
+
+                                            {% endif %}
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="gap-card-footer">
+
+                                        <div>
+
+                                            <span>
+                                                REQUIRED SKILLS
+                                            </span>
+
+                                            <strong>
+                                                {{ internship["required_skills_list"]|length }}
+                                            </strong>
+
+                                        </div>
+
+                                        <a
+                                            href="{{ url_for('internships', search=internship['role_title']) }}"
+                                            class="view-internship-button"
+                                        >
+                                            View Internship →
+                                        </a>
+
+                                    </div>
+
+                                </article>
+
+                            {% endfor %}
+
+                        </div>
+
+                    {% else %}
+
+                        <div class="empty-state">
+
+                            <div class="empty-icon">
+                                ◇
+                            </div>
+
+                            <h3>No internship gaps available.</h3>
+
+                            <p>
+                                There are no active internships available
+                                for skill-gap comparison right now.
+                            </p>
+
+                        </div>
+
+                    {% endif %}
+
+                </section>
+
+                <section class="next-action-card">
+
+                    <div class="next-action-icon">
+                        ✦
+                    </div>
+
+                    <div class="next-action-copy">
+
+                        <span>NEXT STEP</span>
+
+                        <h2>
+                            Use your gaps to improve your recommendations.
+                        </h2>
+
+                        <p>
+                            Add newly learned skills to your INTERN profile
+                            and your internship match and skill-gap results
+                            will update from the stored data.
+                        </p>
+
+                    </div>
+
+                    <div class="next-action-buttons">
+
+                        <a
+                            href="{{ url_for('skills') }}"
+                            class="secondary-action"
+                        >
+                            Update My Skills
+                        </a>
+
+                        <a
+                            href="{{ url_for('recommendations') }}"
+                            class="primary-action"
+                        >
+                            View Recommendations →
+                        </a>
+
+                    </div>
+
+                </section>
+
+            {% else %}
+
+                <section class="setup-state">
+
+                    <div class="setup-icon">
+                        ↗
+                    </div>
+
+                    <span class="eyebrow">
+                        SKILL GAP SETUP
+                    </span>
+
+                    <h2>
+                        Complete your profile and add skills first.
+                    </h2>
+
+                    <p>
+                        INTERN needs your academic profile plus saved skills
+                        or resume-detected skills before it can compare your
+                        information with internship requirements.
+                    </p>
+
+                    <div class="setup-actions">
+
+                        {% if not profile %}
+
+                            <a
+                                href="{{ url_for('profile') }}"
+                                class="primary-action"
+                            >
+                                Complete Profile →
+                            </a>
+
+                        {% endif %}
+
+                        {% if not combined_skills %}
+
+                            <a
+                                href="{{ url_for('skills') }}"
+                                class="primary-action"
+                            >
+                                Add My Skills →
+                            </a>
+
+                            <a
+                                href="{{ url_for('resume') }}"
+                                class="secondary-action"
+                            >
+                                Upload Resume
+                            </a>
+
+                        {% endif %}
+
+                    </div>
+
+                </section>
+
+            {% endif %}
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+
+</html>
